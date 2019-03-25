@@ -1,0 +1,19 @@
+{
+  "name": "nasa-trick-web-server",
+  "version": "1.0.0",
+  "description": "Web Server for the Trick Variable Server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ddelago/NASA-Trick-Web-Server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ddelago/NASA-Trick-Web-Server/issues"
+  },
+  "homepage": "https://github.com/ddelago/NASA-Trick-Web-Server#readme"
+}
