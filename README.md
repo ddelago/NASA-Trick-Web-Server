@@ -1,2 +1,2 @@
-# NASA-Trick-Variable-Server-Web-Integration
+# NASA-Trick-Web-Server
 A NodeJS tool to stream data from the Trick Variable Server.
