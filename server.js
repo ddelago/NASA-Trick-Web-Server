@@ -5,6 +5,7 @@
 var http = require('http');
 var net = require('net');
 const express = require('express');
+<<<<<<< HEAD
 const router = express.Router();
 const config = require('./config.json');
 // const routes = require('./routes/index');
@@ -57,10 +58,22 @@ client.on('close', function() {
 });
 
 
+=======
+const routes = require('./routes/router');
+>>>>>>> 29b03264a7e24832f893544d03188724783d87bb
 
 
+<<<<<<< HEAD
 // Start the server
 server.listen(config.api_port, config.ip_addr, () => {
     const serverURL = `http://${server.address().address}:${server.address().port}`;
     console.log(`Trick Web Server running at ${serverURL}`);
 });
+=======
+// Load static files that are in the /public directory
+app.use(express.static('public'));
+
+const server = app.listen(3000, () => {
+    console.log(`Express is running on port ${server.address().port}`);
+});
+>>>>>>> 29b03264a7e24832f893544d03188724783d87bb
