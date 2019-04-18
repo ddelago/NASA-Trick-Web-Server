@@ -1,5 +1,7 @@
 /* 
  * Sets up connection to Trick server
+ * How will this scale for very large simulations??
+ * How to handle batch requests??
  */
 
 import net from 'net';

@@ -1,15 +1,29 @@
 import express from 'express';
 const router = express.Router();
 import { trickData } from '../common/variables';
-export { router, getVariable, addVariable };
+export { router, getVariable, getBatchVariables, addVariable };
 
 // Get a variable's current value from Trick
 function getVariable(trickClient) {
     router.get('/cmd/getVariable', (req, res) => {
+
+        console.log(req.body);
+
         // Send command to Trick
         trickClient.write(`trick.var_add(\"${req.body.variable}\")\n`);
 
         res.send({"value": trickData[0]});
+    });
+}
+
+// Create a batch request??
+function getBatchVariables(trickClient) {
+    router.get('/cmd/getVariable', (req, res) => {
+        // Send command to Trick
+        console.log(req.body)
+        // trickClient.write(`trick.var_add(\"${req.body.variable}\")\n`);
+
+        // res.send({"value": trickData[0]});
     });
 }
 
