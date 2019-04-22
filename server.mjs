@@ -6,7 +6,7 @@ import http from 'http';
 import bodyParser from 'body-parser';
 import express from 'express';
 import { trickClient, startTrickConn } from './trick/trickConnection';
-import { router, getVariable, getBatchVariables } from './routes/router';
+import { router, setRoutes } from './router';
 import { config, setCommandLineArgs } from './common/variables';
 
 // Command line arguements
@@ -21,9 +21,8 @@ var server = http.createServer(app);
 app.use(bodyParser.json({strict: false}));
 app.use('/', router);
 
-// routes
-getVariable(trickClient);
-getBatchVariables(trickClient);
+// Setup routes
+setRoutes(trickClient);
 
 // Start the server
 server.listen(config.api_port, config.ip_addr, () => {

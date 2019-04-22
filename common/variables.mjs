@@ -4,15 +4,10 @@ var config = {
     "stream_port": 3001
 };
 
-const trickCommands = [
-    "",
-    ""
-]
+const trickCommands = [];
 
 // Store as object with names and values or array of variables names?
-var trickVariables = {
-
-}
+var trickVariables = {};
 
 // Command line arguements include Trick address and port
 var commandLineArgs = "";
