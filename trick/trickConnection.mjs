@@ -21,7 +21,7 @@ function startTrickConn(){
         console.log('Received: ' + data);
 
         // Skip leading zero value, and cut off trailing new line character. Split on rest.
-        data = data.toString().substring(2,data.length-2).split("\t");
+        data = data.toString().substring(3,data.length-2).split("\t");
 
         // Store data
         setTrickData(data);
