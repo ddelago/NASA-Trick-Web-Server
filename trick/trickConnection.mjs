@@ -5,11 +5,15 @@
  */
 
 import net from 'net';
-import log from 'log-to-file';
+import util from 'util';
+import fs from 'fs';
 import { commandLineArgs as args, setTrickData } from '../common/variables';
 export { trickClient, startTrickConn };
 
 var trickClient = new net.Socket();
+
+// Log trick data to file (In order to parse S_sie.resource file)
+var log_file = fs.createWriteStream('./common/trick_output.log', {flags : 'w'});
 
 function startTrickConn(){
     // Connect to Trick server from command line arguements
@@ -19,13 +23,12 @@ function startTrickConn(){
 
     // Fetch the current value of the variable only
     trickClient.on('data', function(data) {
-        console.info('Received: ' + data);
         
         // Skip leading zero value, and cut off trailing new line character. Split on rest.
         data = data.toString().substring(2,data.length-2).split("\t");
 
-        // Log data to file, Used to get S_sie.resource file. 
-        log(data[0], './common/trick_output.log');
+        // console.log(data[0])
+        log_file.write(util.format(data[0]) + '\n');
 
         // Store data, only sends first value (because this is FETCH method)
         setTrickData(data[0]);
@@ -37,6 +40,6 @@ function startTrickConn(){
     });
 
     trickClient.on('close', function() {
-        console.log('Connection closed');
+        console.log('Connection closed'); 
     });
 }

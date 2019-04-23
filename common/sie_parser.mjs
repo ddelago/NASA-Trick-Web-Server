@@ -1,33 +1,22 @@
 import fs from 'fs';
 import { trickData } from './variables';
-export { getTrickVars };
+export { parseSie };
 
-function getTrickVars(trickClient) {
+function parseSie(trickClient) {
 
     // Get list of variables
     trickClient.write(`trick.send_sie_resource()\n`);
-
     
-    function wait() {
-        if(trickData[0] === undefined) {
-            setTimeout(wait, 100);
-            return;
-        }
-        
+    function readSie() {
 
-        if(trickData[0].includes("<sie>") && trickData.includes("</sie>")) {
-
-            // console.log(trickData[0])
-
-            fs.writeFile("./common/test.xml", trickData, function(err) {
-                if(err) {
-                    return console.log(err);
-                }
-                console.log("The file was saved!");
-            }); 
-        } 
+        fs.readFile('./common/trick_output.log', 'utf8', function(err, contents) {
+            console.log("CONTENTS", contents);
+        });
+    
     } 
-    wait();
+
+    // Allow time to populate 
+    setTimeout(readSie, 1000);
 
 }
 
