@@ -7,19 +7,25 @@ function getTrickVars(trickClient) {
     // Get list of variables
     trickClient.write(`trick.send_sie_resource()\n`);
 
-    var oldValue = trickData[0];
+    
     function wait() {
-        if(trickData[0] === oldValue) {
-            setTimeout(wait, 10);
+        if(trickData[0] === undefined) {
+            setTimeout(wait, 100);
             return;
         }
+        
 
-        fs.writeFile("./common/test.xml", trickData[0], function(err) {
-            if(err) {
-                return console.log(err);
-            }
-            console.log("The file was saved!");
-        }); 
+        if(trickData[0].includes("<sie>") && trickData.includes("</sie>")) {
+
+            // console.log(trickData[0])
+
+            fs.writeFile("./common/test.xml", trickData, function(err) {
+                if(err) {
+                    return console.log(err);
+                }
+                console.log("The file was saved!");
+            }); 
+        } 
     } 
     wait();
 

@@ -5,6 +5,7 @@
  */
 
 import net from 'net';
+import log from 'log-to-file';
 import { commandLineArgs as args, setTrickData } from '../common/variables';
 export { trickClient, startTrickConn };
 
@@ -18,13 +19,16 @@ function startTrickConn(){
 
     // Fetch the current value of the variable only
     trickClient.on('data', function(data) {
-        console.log('Received: ' + data);
-
+        console.info('Received: ' + data);
+        
         // Skip leading zero value, and cut off trailing new line character. Split on rest.
         data = data.toString().substring(2,data.length-2).split("\t");
 
-        // Store data
-        setTrickData(data);
+        // Log data to file, Used to get S_sie.resource file. 
+        log(data[0], './common/trick_output.log');
+
+        // Store data, only sends first value (because this is FETCH method)
+        setTrickData(data[0]);
 
         // Clear Trick stream
         trickClient.pause();

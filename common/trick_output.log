@@ -1,0 +1,515 @@
+2019.04.23, 16:04:22.0732 UTC ->    name="er7_deriv"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Allocated array of size buf_size used to trick out Trick's load_deriv.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="er7_deriv2"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Allocated array of size buf_size used to trick out Trick's load_deriv2.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="trick_integ_constructor"
+      type="er7_utils__IntegratorConstructor"
+      io_attributes="15"
+      units="--"
+      description="n The integrator constructor used to generate the state integrators this object.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="first_order_integrator"
+      type="er7_utils__FirstOrderODEIntegrator"
+      io_attributes="15"
+      units="--"
+      description="n The integrator that propagates state as a first order ODE.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="second_order_integrator"
+      type="er7_utils__SecondOrderODEIntegrator"
+      io_attributes="15"
+      units="--"
+      description="n The integrator that propagates state as a second order ODE.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="buf_size"
+      type="unsigned int"
+      io_attributes="15"
+      units="--"
+      description="n Number of elements in the Trick::Integration group arrays.">
+    </member>
+    <member
+      name="half_state_size"
+      type="int"
+      io_attributes="15"
+      units="--"
+      description="n Number of elements in the Trick::Integration group arrays.">
+    </member>
+    <member
+      name="integ_mode"
+      type="er7_utils__TrickIntegrator__IntegrationMode"
+      io_attributes="15"
+      units="--"
+      description="n Indicates which of the first or second order integrator is to be used.">
+    </member>
+    <member
+      name="default_first_step_deriv"
+      type="bool"
+      io_attributes="15"
+      units="--"
+      description="n Default value of the Trick::Integrator first_step_deriv flag.">
+    </member>
+  </class>
+
+  <class name="er7_utils__UInt128">
+    <member
+      name="low"
+      type="unsigned long"
+      io_attributes="15"
+      units="--">
+    </member>
+    <member
+      name="high"
+      type="unsigned long"
+      io_attributes="15"
+      units="--">
+    </member>
+  </class>
+
+  <class name="er7_utils__VelocityVerletGeneralizedDerivSecondOrderODEIntegrator">
+    <member
+      name="state_size"
+      type="int"
+      io_attributes="15"
+      units="--"
+      description="n The sizes of the generalized position and generalized velocity vectors.">
+      <dimension>2</dimension>
+    </member>
+    <member
+      name="problem_type"
+      type="er7_utils__Integration__ODEProblemType"
+      io_attributes="15"
+      units="--"
+      description="n The type of problem to be solved.">
+    </member>
+    <member
+      name="init_vel"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Velocity at the start of the integration interval.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="init_acc"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Acceleration at the start of the integration interval.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="dtheta"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Generalized position step.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="posdot"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Position derivative at the first step of the integration cycle.">
+      <dimension>0</dimension>
+    </member>
+  </class>
+
+  <class name="er7_utils__VelocityVerletGeneralizedStepSecondOrderODEIntegrator">
+    <member
+      name="state_size"
+      type="int"
+      io_attributes="15"
+      units="--"
+      description="n The sizes of the generalized position and generalized velocity vectors.">
+      <dimension>2</dimension>
+    </member>
+    <member
+      name="problem_type"
+      type="er7_utils__Integration__ODEProblemType"
+      io_attributes="15"
+      units="--"
+      description="n The type of problem to be solved.">
+    </member>
+    <member
+      name="init_vel"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Velocity at the start of the integration interval.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="init_acc"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Acceleration at the start of the integration interval.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="dtheta"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Generalized position step.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="posdot"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Position derivative at the first step of the integration cycle.">
+      <dimension>0</dimension>
+    </member>
+  </class>
+
+  <class name="er7_utils__VelocityVerletIntegratorConstructor">
+  </class>
+
+  <class name="er7_utils__VelocityVerletSecondOrderODEIntegrator">
+    <member
+      name="state_size"
+      type="int"
+      io_attributes="15"
+      units="--"
+      description="n The sizes of the generalized position and generalized velocity vectors.">
+      <dimension>2</dimension>
+    </member>
+    <member
+      name="problem_type"
+      type="er7_utils__Integration__ODEProblemType"
+      io_attributes="15"
+      units="--"
+      description="n The type of problem to be solved.">
+    </member>
+    <member
+      name="init_vel"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Velocity at the start of the integration interval.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="init_acc"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Acceleration at the start of the integration interval.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="dtheta"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Generalized position step.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="posdot"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Position derivative at the first step of the integration cycle.">
+      <dimension>0</dimension>
+    </member>
+  </class>
+
+  <class name="er7_utils__VelocityVerletSimpleSecondOrderODEIntegrator">
+    <member
+      name="state_size"
+      type="int"
+      io_attributes="15"
+      units="--"
+      description="n The sizes of the generalized position and generalized velocity vectors.">
+      <dimension>2</dimension>
+    </member>
+    <member
+      name="problem_type"
+      type="er7_utils__Integration__ODEProblemType"
+      io_attributes="15"
+      units="--"
+      description="n The type of problem to be solved.">
+    </member>
+    <member
+      name="init_vel"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Velocity at the start of the integration interval.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="init_acc"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Acceleration at the start of the integration interval.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="dtheta"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Generalized position step.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="posdot"
+      type="double"
+      io_attributes="15"
+      units="--"
+      description="n Position derivative at the first step of the integration cycle.">
+      <dimension>0</dimension>
+    </member>
+  </class>
+
+  <class name="triad_t">
+    <member
+      name="op"
+      type="int"
+      io_attributes="15"
+      units="--"
+      description="operator">
+    </member>
+    <member
+      name="a1"
+      type="int"
+      io_attributes="15"
+      units="--"
+      description="arg1">
+    </member>
+    <member
+      name="a2"
+      type="int"
+      io_attributes="15"
+      units="--"
+      description="arg2">
+    </member>
+  </class>
+
+  <class name="v_tree">
+    <member
+      name="last"
+      type="v_tree"
+      io_attributes="15"
+      units="--"
+      description="last element in the current list">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="next"
+      type="v_tree"
+      io_attributes="15"
+      units="--"
+      description="next element in the current list">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="down"
+      type="v_tree"
+      io_attributes="15"
+      units="--"
+      description="subordinate list of the current element. If non-NULL then &quot;v_data&quot; should be NULL.">
+      <dimension>0</dimension>
+    </member>
+    <member
+      name="v_data"
+      type="V_DATA"
+      io_attributes="15"
+      units="--"
+      description="data of the current element. If non-NULL then &quot;down&quot; should be NULL.">
+      <dimension>0</dimension>
+    </member>
+  </class>
+
+  <top_level_object
+   name="dyn"
+   type="SatelliteSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="dyn_integloop"
+   type="IntegLoopSimObject"
+   alloc_memory_init="0">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_cmd_args"
+   type="CommandLineArgumentsSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_cpr"
+   type="CheckPointRestartSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_data_record"
+   type="DataRecordDispatcherSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_data_record_group_satellite"
+   type="Trick__DRBinary"
+   alloc_memory_init="0">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_dmtcp"
+   type="DMTCPSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_em"
+   type="EventManagerSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_frame"
+   type="Trick__FrameDataRecordGroup"
+   alloc_memory_init="0">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_frame_log"
+   type="FrameLogSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_frame_trick_jobs"
+   type="Trick__FrameDataRecordGroup"
+   alloc_memory_init="0">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_frame_userjobs_main"
+   type="Trick__FrameDataRecordGroup"
+   alloc_memory_init="0">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_inject"
+   type="InjectorSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_injector_executor_0"
+   type="InjectorExecSimObject"
+   alloc_memory_init="0">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_instruments"
+   type="InstrumentationSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_ip"
+   type="InputProcessorSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_jit"
+   type="JITSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_master_slave"
+   type="MasterSlaveSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_mc"
+   type="MonteCarloSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_message"
+   type="MessageSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_mm"
+   type="MemoryManagerSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_real_time"
+   type="RTSyncSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_sie"
+   type="SieSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_sys"
+   type="SysSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_udunits"
+   type="UdUnitsSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_utest"
+   type="UnitTestSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_vs"
+   type="VariableServerSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+  <top_level_object
+   name="trick_zero_conf"
+   type="ZeroconfSimObject"
+   alloc_memory_init="1">
+  </top_level_object>
+
+</sie
