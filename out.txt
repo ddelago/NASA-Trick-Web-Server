@@ -1,3 +1,9 @@
+
+> nasa-trick-web-server@1.0.0 start /home/ddelago/NASA-Trick-Web-Server
+> node --experimental-modules --no-warnings server.mjs "139.169.172.213" "33539"
+
+Trick Web Server running at http://127.0.0.1:3000
+Connected to Trick server at 139.169.172.213:33539
 352771
 <?xml version="1.0"?>
 
@@ -147,7 +153,8 @@
       type="INDEX"
       io_attributes="15"
       units="--"
-      description="An array of array-index information or bit-field information. Is only meaningful if num_index > 0 or if type is a bit field type.">
+      description="An array of array-index information or bit-field information. Is only meaningful if num_index > 0 or if 
+ is a bit field type.">
       <dimension>8</dimension>
     </member>
   </class>
@@ -1378,8 +1385,7 @@
       type="er7_utils__IntegrationControls"
       io_attributes="15"
       units="--"
-      description="n The integration controls object that guides the integration process. This object is created at construction time by calling the integrator constructor's create_integr
-n_controls method.">
+      description="n The integration controls object that guides the integration process. This object is created at construction time by calling the integrator constructor's create_integration_controls method.">
       <dimension>0</dimension>
     </member>
     <member
@@ -2922,7 +2928,8 @@ n_controls method.">
     <member
       name="name"
       type="std__string"
-      io_attributes="15"
+ 
+ io_attributes="15"
       units="1">
     </member>
     <member
@@ -4375,8 +4382,7 @@ n_controls method.">
       units="1">
       <dimension>0</dimension>
       <dimension>0</dimension>
-  
-member>
+    </member>
     <member
       name="time"
       type="double"
@@ -6002,7 +6008,8 @@ member>
       type="er7_utils__IntegratorInterface"
       io_attributes="15"
       units="--"
-      description="n The interface between the integration module and the simulation engine's integration structure.">
+      description="n The interf
+between the integration module and the simulation engine's integration structure.">
       <dimension>0</dimension>
     </member>
     <member
@@ -7006,8 +7013,7 @@ member>
       type="er7_utils__IntegratorInterface"
       io_attributes="15"
       units="--"
-      description="n T
-nterface between the integration module and the simulation engine's integration structure.">
+      description="n The interface between the integration module and the simulation engine's integration structure.">
       <dimension>0</dimension>
     </member>
     <member
@@ -8812,7 +8818,8 @@ nterface between the integration module and the simulation engine's integration 
       type="Trick__VariableServer"
       io_attributes="15"
       units="1">
-    </member>
+    
+mber>
     <member
       name="sim_control_panel"
       type="Trick__SimControlPanel"
@@ -9819,8 +9826,7 @@ nterface between the integration module and the simulation engine's integration 
       type="double"
       io_attributes="15"
       units="--"
-      
-ription="n Velocity used to update position.">
+      description="n Velocity used to update position.">
       <dimension>0</dimension>
     </member>
     <member
@@ -11057,7 +11063,8 @@ ription="n Velocity used to update position.">
     </member>
     <member
       name="primer"
-      type="er7_utils__SecondOrderODEIntegrator"
+      type="er7_utils__
+ndOrderODEIntegrator"
       io_attributes="15"
       units="--"
       description="n The state integrator used to prime this integrator.">
@@ -12111,7 +12118,8 @@ ription="n Velocity used to update position.">
       <dimension>0</dimension>
     </member>
   </class>
-<class name="er7_utils__RKFehlberg45SimpleSecondOrderODEIntegrator">
+
+  <class name="er7_utils__RKFehlberg45SimpleSecondOrderODEIntegrator">
     <member
       name="state_size"
       type="int"
@@ -13394,7 +13402,8 @@ ription="n Velocity used to update position.">
       type="er7_utils__IntegrationControls"
       io_attributes="15"
       units="--"
-      description="n The integration controls object that guides the integration process. This object is created at construction time by calling the integrator constructor's create_integration_controls method.">
+      description="n The integration c
+ols object that guides the integration process. This object is created at construction time by calling the integrator constructor's create_integration_controls method.">
       <dimension>0</dimension>
     </member>
     <member

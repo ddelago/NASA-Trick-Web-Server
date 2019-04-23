@@ -9,8 +9,8 @@ function parseSie(trickClient) {
     
     function readSie() {
 
-        fs.readFile('./common/trick_output.log', 'utf8', function(err, contents) {
-            console.log("CONTENTS", contents);
+        fs.readFile('./common/trick_output.txt', 'utf8', function(err, contents) {
+            // console.log("CONTENTS", contents);
         });
     
     } 

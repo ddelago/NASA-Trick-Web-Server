@@ -13,7 +13,7 @@ export { trickClient, startTrickConn };
 var trickClient = new net.Socket();
 
 // Log trick data to file (In order to parse S_sie.resource file)
-var log_file = fs.createWriteStream('./common/trick_output.log', {flags : 'w'});
+var log_file = fs.createWriteStream('./common/trick_output.txt', {flags : 'w'});
 
 function startTrickConn(){
     // Connect to Trick server from command line arguements
@@ -27,8 +27,9 @@ function startTrickConn(){
         // Skip leading zero value, and cut off trailing new line character. Split on rest.
         data = data.toString().substring(2,data.length-2).split("\t");
 
-        // console.log(data[0])
-        log_file.write(util.format(data[0]) + '\n');
+        console.log(data[0])
+        // log_file.write(data[0]);
+        fs.writeFileSync('./common.trick_output.txt', data[0])
 
         // Store data, only sends first value (because this is FETCH method)
         setTrickData(data[0]);
