@@ -10,7 +10,7 @@ function parseSie(trickClient) {
     function readSie() {
 
         fs.readFile('./common/trick_output.txt', 'utf8', function(err, contents) {
-            // console.log("CONTENTS", contents);
+            console.log("CONTENTS", contents);
         });
     
     } 

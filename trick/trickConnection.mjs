@@ -5,7 +5,6 @@
  */
 
 import net from 'net';
-import util from 'util';
 import fs from 'fs';
 import { commandLineArgs as args, setTrickData } from '../common/variables';
 export { trickClient, startTrickConn };
@@ -13,7 +12,7 @@ export { trickClient, startTrickConn };
 var trickClient = new net.Socket();
 
 // Log trick data to file (In order to parse S_sie.resource file)
-var log_file = fs.createWriteStream('./common/trick_output.txt', {flags : 'w'});
+var log_file = fs.createWriteStream('./common/trick_output.log', {flags : 'w'});
 
 function startTrickConn(){
     // Connect to Trick server from command line arguements
@@ -23,7 +22,7 @@ function startTrickConn(){
 
     // Fetch the current value of the variable only
     trickClient.on('data', function(data) {
-        // console.log(data[0])
+
         log_file.write(data);
         
         // Skip leading zero value, and cut off trailing new line character. Split on rest.
