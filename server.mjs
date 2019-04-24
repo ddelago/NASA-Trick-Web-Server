@@ -5,10 +5,10 @@
 import http from 'http';
 import bodyParser from 'body-parser';
 import express from 'express';
-import { trickClient, startTrickConn } from './trick/trickConnection';
 import { router, setRoutes } from './router';
 import { config, setCommandLineArgs } from './common/variables';
-import { parseSie } from './common/sie_parser';
+import { trickClient, startTrickConn } from './trick/trickConnection';
+import { parseSie } from './trick/sie_parser';
 
 // Command line arguements
 setCommandLineArgs( process.argv.slice(2) ); 
@@ -16,7 +16,7 @@ setCommandLineArgs( process.argv.slice(2) );
 // Start connection Trick server
 startTrickConn();
 
-// Parse SIE file from Trick to get variables
+// Parse S_sie.resource file from Trick to get variables
 parseSie(trickClient);
 
 /************** EXPRESS SERVER START **************/
