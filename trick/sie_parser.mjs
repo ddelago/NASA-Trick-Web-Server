@@ -1,3 +1,10 @@
+/*
+ * Daniel Delago
+ * daniel.b.delago@nasa.gov
+ * Node.js S_sie.resource parsing algorithm
+ * 
+ */
+
 import fs from 'fs';
 import  xml2js  from 'xml2js';
 export { parseSie };
@@ -32,12 +39,54 @@ function parseSie(trickClient) {
     } 
 
     // Allow time for file to populate (S_sie.resource files are very large)
-    setTimeout(readSie, 500);
+    setTimeout(readSie, 1000);
 }
 
-// Extract variables and heiarchy from SIE and store variable list locally.
-function extractElements(sieXML) {
-    console.log(sieXML.sie);
+// Extract variables from SIE and store variable list locally.
+function extractElements(sieObject) {
+	// console.log(sieObject.sie);
+
+	var classList = [];
+	var enumList = [];
+	var topLevelObjectList = [];
+
+	// Get classes
+	sieObject.sie.class.forEach(function(element) {
+		// console.log(element);
+		classList.push(element.$.name);
+		walkClassTree(element);
+	});
+
+	// Get enums (if they exist)
+	if(sieObject.sie.enumeration !== undefined) {
+		sieObject.sie.enumeration.forEach(function(element) {
+			enumList.push(element.$.name);
+		});
+	}
+
+	// Get top_level_objects
+	sieObject.sie.top_level_object.forEach(function(element) {
+		topLevelObjectList.push(element.$);
+	});
+
+	// console.log("CLASSES:\n", classList);
+	// console.log("\nENUMS:\n", enumList);
+	// console.log("\nTOP LEVEL OBJECTS:\n", topLevelObjectList);
+}
+
+
+function walkClassTree(classObject, varString) {
+	
+	// If class has no members
+	if(classObject.member === undefined) {
+		return;
+	}	
+	
+	console.log(`MEMBERS OF ${classObject.$.name}`)
+	classObject.member.forEach(function(element) {
+		console.log(element);
+	});
+
 }
 
 

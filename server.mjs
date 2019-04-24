@@ -1,6 +1,8 @@
-// Trick Web Server
-// Daniel Delago
-// daniel.b.delago@nasa.gov
+/* 
+ * Trick Web Server
+ * Daniel Delago
+ * daniel.b.delago@nasa.gov
+ */
 
 import http from 'http';
 import bodyParser from 'body-parser';
