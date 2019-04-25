@@ -2,14 +2,18 @@
  * Daniel Delago
  * daniel.b.delago@nasa.gov
  * Node.js S_sie.resource parsing algorithm
- * 
+ * Recursively constructs variables based on S_sie.resource file 
  */
 
 import fs from 'fs';
 import  xml2js  from 'xml2js';
+import { addTrickVariable, trickVariables } from '../common/variables';
 export { parseSie };
 
 var parser = new xml2js.Parser();
+var classList = {};
+var enumList = [];
+var topLevelObjectList = [];
 
 function parseSie(trickClient) {
 
@@ -38,23 +42,16 @@ function parseSie(trickClient) {
         });
     } 
 
-    // Allow time for file to populate (S_sie.resource files are very large)
+    // Allow time for file to populate (S_sie.resource files are very very large)
     setTimeout(readSie, 1000);
 }
 
-// Extract variables from SIE and store variable list locally.
+// Extract variables from SIE
 function extractElements(sieObject) {
-	// console.log(sieObject.sie);
-
-	var classList = [];
-	var enumList = [];
-	var topLevelObjectList = [];
 
 	// Get classes
 	sieObject.sie.class.forEach(function(element) {
-		// console.log(element);
-		classList.push(element.$.name);
-		walkClassTree(element);
+		classList[element.$.name] = element;
 	});
 
 	// Get enums (if they exist)
@@ -67,182 +64,135 @@ function extractElements(sieObject) {
 	// Get top_level_objects
 	sieObject.sie.top_level_object.forEach(function(element) {
 		topLevelObjectList.push(element.$);
+		
+		// Begin recursive construction of variable list
+		walkClassTree(element.$, element.$.name);
 	});
 
+	// console.log(classList['Satellite'].member[0]);
 	// console.log("CLASSES:\n", classList);
 	// console.log("\nENUMS:\n", enumList);
 	// console.log("\nTOP LEVEL OBJECTS:\n", topLevelObjectList);
+	console.log(trickVariables);
 }
 
-
+// Recursively constuct variables and add to list
 function walkClassTree(classObject, varString) {
 	
+	// If top level object (TLO)
+	if(topLevelObjectList.includes(classObject)) {
+		// Return the class that equals the TLO type
+		return walkClassTree(classList[classObject.type], varString);
+	}
+
 	// If class has no members
 	if(classObject.member === undefined) {
-		return;
-	}	
+		return addTrickVariable(varString);
+	}
 	
-	console.log(`MEMBERS OF ${classObject.$.name}`)
-	classObject.member.forEach(function(element) {
-		console.log(element);
-	});
+	// Loop over class members
+	classObject.member.forEach(function(member) {
 
+		// Check if Enum
+		if(enumList.includes(member.$.name)) {
+			return addTrickVariable(`${varString}.${member.$.name}`)
+		}
+
+		// If class, recurse on object. DONT FORGET THAT CLASSES CAN HAVE DIMENSIONS
+		if(classList.hasOwnProperty(member.$.type) ) {
+			if(member.hasOwnProperty('dimension')) {
+				return addDimensionsClass(member, varString);
+			} 
+			else {
+				return walkClassTree(classList[member.$.type], `${varString}.${member.$.name}`);
+			}
+		}
+		
+		// If primitive 
+		// If the primitive has dimensions
+		if(member.hasOwnProperty('dimension')) {
+			return addDimensionsPrimitive(member, varString);
+		}
+
+		// If the primitive has no dimensions, just return 
+		return addTrickVariable(`${varString}.${member.$.name}`);
+	});
 }
 
+// Add dimensions to class
+function addDimensionsClass(member, varString) {
+	var dims = member.dimension.length;
 
-// for each topLevelObject in (xml elements of type <top_level_object>):
-//     info = new MemberInfo(topLevelObject)
-//     allInstances.add(info)
-//     rootInstances.add(info)
+	// Weird case where dimension is ZERO
+	if(member.dimension[0] == '0')
+		return walkClassTree(classList[member.$.type], `${varString}.${member.$.name}[0]`);
 
-// for each clazz in (xml elements of type <class>):
-//     memberList = new List()
-//     typeHashMap[clazz.name] = memberList
-//     for each member in (xml element of type <member>):
-//     info = new MemberInfo(member)
-//     allInstances.add(info)
-//     memberList.add(info)
-
-// for each enum in (xml elements of type <enumeration>):
-//     enumHashMap[enum.name] = new EnumInfo(enum)
-
-// for each instance in allInstances:
-//     instance.children = typeHashMap[instance.type]       // one of these
-//     instance.enumeration = enumHashMap[instance.type]    // will be NULL
-
-// Daniel Delago 
-// daniel.b.delago@nasa.gov
-// Go XML Parser for S_sie.resource files
-// package Parsers
-
-// import (
-// 	"encoding/xml"
-// 	"fmt"	
-// 	"io/ioutil"
-// )
-
-// func ExampleUnmarshal() {
-
-// 	type Pair struct {
-// 		Label 			string 				`xml:"label,attr"`
-// 		Value 			string 				`xml:"value,attr"`
-// 	}	
-
-// 	type Enumeration struct {
-// 		Name 			string 				`xml:"name,attr"`
-// 		Pairs			[]Pair 				`xml:"pair"`
-// 	} 
-
-// 	type Member struct {
-// 		Name 			string 				`xml:"name,attr"`
-// 		Type 			string 				`xml:"type,attr"`
-// 		IO_attributes 	string 				`xml:"io_attributes,attr"`
-// 		Units 			string 				`xml:"units,attr"`
-// 		Description 	string 				`xml:"description,attr"`
-// 		Dimensions 		[]string			`xml:"dimension"`
-// 	}
-
-// 	type Class struct {
-// 		XMLName 		xml.Name 			`xml:"class"`
-// 		Name 			string 				`xml:"name,attr"`
-// 		Members 		[]Member 			`xml:"member"`
-// 	}
-
-// 	type TopLevelObject struct {
-// 		XMLName 		xml.Name 			`xml:"top_level_object"`
-// 		Name 			string 				`xml:"name,attr"`
-// 		Type 			string 				`xml:"type,attr"`
-// 		Dimensions 		[]string			`xml:"dimension"`
-// 	} 
-
-// 	type SIE struct {
-// 		XMLName 		xml.Name 			`xml:"sie"`
-// 		TopLevelObjects	[]TopLevelObject 	`xml:"top_level_object"`
-// 		Classes			[]Class 			`xml:"class"`
-// 		Enumerations	[]Enumeration 		`xml:"enumeration"`
-// 	}
-
-// 	v := SIE{}
-
-// 	dat, err := ioutil.ReadFile("src/variables/S_sie.resource")
-
-// 	if err != nil {
-//         panic(err)
-// 	}
-	
-// 	err2 := xml.Unmarshal([]byte(dat), &v)
-// 	if err2 != nil {
-// 		fmt.Printf("error: %v", err2)
-// 		return
-// 	}
-
-	// fmt.Printf("XMLName: %#v\n", v.XMLName)
-	// for object := range v.TopLevelObjects {
-	// 	fmt.Printf("Object Name: %v\n", v.TopLevelObjects[object].Name)
-	// 	fmt.Printf("---Type: %v\n", v.TopLevelObjects[object].Type)
-	// 	fmt.Printf("---Dimensions: %v Length: %v\n", v.TopLevelObjects[object].Dimensions, len(v.TopLevelObjects[object].Dimensions))
-	// }
-
-	// fmt.Printf("\n\nCLASSES BELOW:\n")
-	// for object := range v.Classes {
-	// 	fmt.Printf("Class Name: %v\n", v.Classes[object].Name)	
-	// 	for member := range v.Classes[object].Members {
-	// 		fmt.Printf("---member: %v\n", v.Classes[object].Members[member].Name)
-	// 		fmt.Printf("   ---Type: %v\n", v.Classes[object].Members[member].Type)
-	// 		fmt.Printf("   ---IO_attributes: %v\n", v.Classes[object].Members[member].IO_attributes)
-	// 		fmt.Printf("   ---Units: %v\n", v.Classes[object].Members[member].Units)
-	// 		fmt.Printf("   ---Description: %v\n", v.Classes[object].Members[member].Description)
-	// 		fmt.Printf("   ---Dimensions: %v Length: %v \n", v.Classes[object].Members[member].Dimensions, len(v.Classes[object].Members[member].Dimensions))
-	// 	}
-	// }
-
-	// fmt.Printf("\n\nENUMERATIONS BELOW:\n")
-	// for object := range v.Enumerations {
-	// 	fmt.Printf("Enum Name: %v\n", v.Enumerations[object].Name)
-	// 	for pair := range v.Enumerations[object].Pairs {
-	// 		fmt.Printf("---Pair: %v %v\n",v.Enumerations[object].Pairs[pair].Label, v.Enumerations[object].Pairs[pair].Value)
-	// 	}
-	// }
-
-
-	// TODO: Enable functionality below to display all available trick variables on Dashboard
-
-	// varList := make([]string,0)
-	// classMap := make(map[string]bool)
-	// enumMap := make(map[string]bool)
-
-	// // Create boolean map for classes
-	// for i := 0; i < len(v.Classes); i++ {
-    //    	classMap[v.Classes[i].Name] = true
-	// }
-
-	// // Create boolean map for enums
-	// for i := 0; i < len(v.Enumerations); i++ {
-    //    	enumMap[v.Enumerations[i].Name] = true
-	// }
-
-	// // For each top level object
-	// for object := range v.TopLevelObjects {
+	// Loop over dimensions
+	for(var x = 0; x < Number(member.dimension[0]); x++) {
+		if(dims == 1)
+			walkClassTree(classList[member.$.type], `${varString}.${member.$.name}[${x}]`);
 		
-	// 	varName := v.TopLevelObjects[object].Name
-	// 	dim := len(v.TopLevelObjects[object].Dimensions)
+		// If 2 dimensions
+		else {
+			// Weird case where dimension is ZERO
+			if(member.dimension[1] == '0') {
+				walkClassTree(classList[member.$.type], `${varString}.${member.$.name}[${x}][0]`);
+				continue;
+			}
+			for(var y = 0; y < Number(member.dimension[1]); y++) {
+				if(dims == 2)
+					walkClassTree(classList[member.$.type], `${varString}.${member.$.name}[${x}][${y}]`);
 
-	// 	// Dimension length is zero, only single attribute
-	// 	if dim == 0 {
-	// 		// If type is a class
-	// 		if classMap[v.TopLevelObjects[object].Type] {
+				// If 3 dimensions
+				else {
+					// Weird case where dimension is ZERO
+					if(member.dimension[2] == '0') {
+						walkClassTree(classList[member.$.type], `${varString}.${member.$.name}[${x}][${y}][0]`);
+						continue;
+					}
+					for(var z = 0; z < Number(member.dimension[2]); z++)
+						walkClassTree(classList[member.$.type], `${varString}.${member.$.name}[${x}][${y}][${z}]`);
+				}
+			}
+		}
+	}
+}
 
-	// 		}
+// Add dimensions to primitive
+function addDimensionsPrimitive(member, varString) {
+	var dims = member.dimension.length;
 
-	// 		// If type is an enum
-	// 		else if enumMap[v.TopLevelObjects[object].Type] {
-	// 			// Just append because not able to change variable values yet
-	// 			varList = append(varList, varName)
-	// 		}
+	// Weird case where dimension is ZERO
+	if(member.dimension[0] == '0')
+		return addTrickVariable(`${varString}.${member.$.name}[0]`);
 
-	// 		// Else type is a primitive type
-	// 		else {
-	// 			varList = append(varList, varName)
-	// 		}
-	// 	}
-	// }
+	// Loop over dimensions
+	for(var x = 0; x < Number(member.dimension[0]); x++) {
+		if(dims == 1)
+			addTrickVariable(`${varString}.${member.$.name}[${x}]`);
+		
+		// If 2 dimensions
+		else {
+			// Weird case where dimension is ZERO
+			if(member.dimension[1] == '0') {
+				addTrickVariable(`${varString}.${member.$.name}[${x}][0]`);
+				continue;
+			}
+			for(var y = 0; y < Number(member.dimension[1]); y++) {
+				if(dims == 2)
+					addTrickVariable(`${varString}.${member.$.name}[${x}][${y}]`);
+
+				// If 3 dimensions
+				else {
+					// Weird case where dimension is ZERO
+					if(member.dimension[2] == '0') {
+						addTrickVariable(`${varString}.${member.$.name}[${x}][${y}][0]`);
+						continue;
+					}
+					for(var z = 0; z < Number(member.dimension[2]); z++)
+						addTrickVariable(`${varString}.${member.$.name}[${x}][${y}][${z}]`);
+				}
+			}
+		}
+	}
+}
