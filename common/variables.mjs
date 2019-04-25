@@ -11,6 +11,8 @@ function addTrickVariable(value){
     trickVariables.push(value);
 }
 
+var trickVariablesTree = {};
+
 // Command line arguements include Trick address and port
 var commandLineArgs = "";
 function setCommandLineArgs(value){
@@ -28,6 +30,7 @@ export {
     trickCommands, 
     trickVariables,
     addTrickVariable,
+    trickVariablesTree,
     commandLineArgs,
     setCommandLineArgs,
     trickData,
