@@ -131,7 +131,7 @@ function addDimensionsClass(member, varString, varTreeObject) {
 	var dims = member.dimension.length;
 
 	// Weird case where dimension is ZERO
-	if(member.dimension[0] == '0') {
+	if(member.dimension[0] == '0' && dims == 1) {
 		varTreeObject[`${member.$.name}[0]`] = {};
 		return walkClassTree(classList[member.$.type], `${varString}.${member.$.name}[0]`, varTreeObject[`${member.$.name}[0]`]);
 	}
@@ -146,7 +146,7 @@ function addDimensionsClass(member, varString, varTreeObject) {
 		// If 2 dimensions
 		else {
 			// Weird case where dimension is ZERO
-			if(member.dimension[1] == '0') {
+			if(member.dimension[1] == '0' && dims == 2) {
 				varTreeObject[`${member.$.name}[${x}][0]`] = {};
 				walkClassTree(classList[member.$.type], `${varString}.${member.$.name}[${x}][0]`, varTreeObject[`${member.$.name}[${x}][0]`]);
 				continue;
@@ -160,7 +160,7 @@ function addDimensionsClass(member, varString, varTreeObject) {
 				// If 3 dimensions
 				else {
 					// Weird case where dimension is ZERO
-					if(member.dimension[2] == '0') {
+					if(member.dimension[2] == '0' && dims == 3) {
 						varTreeObject[`${member.$.name}[${x}][${y}][0]`] = {};
 						walkClassTree(classList[member.$.type], `${varString}.${member.$.name}[${x}][${y}][0]`, varTreeObject[`${member.$.name}[${x}][${y}][0]`]);
 						continue;
