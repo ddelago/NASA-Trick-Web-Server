@@ -74,7 +74,7 @@ function extractElements(sieObject) {
 	// console.log("\nENUMS:\n", enumList);
 	// console.log("\nTOP LEVEL OBJECTS:\n", topLevelObjectList);
 	// console.log(trickVariables);
-	// console.log(trickVariablesTree.trick_real_time);
+	// console.log(trickVariablesTree.dyn_integloop.integ_sched);
 }
 
 // Recursively constuct variables and add to list
@@ -180,13 +180,13 @@ function addDimensionsPrimitive(member, varString, varTreeObject) {
 	var dims = member.dimension.length;
 
 	// Weird case where dimension is ZERO
-	if(member.dimension[0] == '0') {
+	if(member.dimension[0] == '0' && dims == 1) {
 		varTreeObject[`${member.$.name}[0]`] = {}
 		return addTrickVariable(`${varString}.${member.$.name}[0]`);
 	}
 
 	// Loop over dimensions
-	for(var x = 0; x < Number(member.dimension[0]); x++) {
+	for(var x = 0; x <= Number(member.dimension[0]); x++) {
 		if(dims == 1) {
 			varTreeObject[`${member.$.name}[${x}]`] = {}
 			addTrickVariable(`${varString}.${member.$.name}[${x}]`);
@@ -195,7 +195,7 @@ function addDimensionsPrimitive(member, varString, varTreeObject) {
 		// If 2 dimensions
 		else {
 			// Weird case where dimension is ZERO
-			if(member.dimension[1] == '0') {
+			if(member.dimension[1] == '0' && dims == 2) {
 				varTreeObject[`${member.$.name}[${x}][0]`] = {};
 				addTrickVariable(`${varString}.${member.$.name}[${x}][0]`);
 				continue;
@@ -209,7 +209,7 @@ function addDimensionsPrimitive(member, varString, varTreeObject) {
 				// If 3 dimensions
 				else {
 					// Weird case where dimension is ZERO
-					if(member.dimension[2] == '0') {
+					if(member.dimension[2] == '0' && dims == 3) {
 						varTreeObject[`${member.$.name}[${x}][${y}][0]`] = {};
 						addTrickVariable(`${varString}.${member.$.name}[${x}][${y}][0]`);
 						continue;
