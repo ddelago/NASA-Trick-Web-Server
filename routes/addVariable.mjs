@@ -5,7 +5,7 @@ export { addVariable as default };
 // Server will then CONSTANTLY update those values from Trick.
 function addVariable(router, trickClient) {
     // Add a variable to track
-    router.put('/cmd/addVariable', (req, res) => {
+    router.put('/data/*', (req, res) => {
         // Send command to Trick
         trickClient.write(`trick.var_add(\"${req.body.variable}\")\n`);
 

@@ -3,7 +3,7 @@ export { getVariable as default };
 
 // Get a variable's current value from Trick
 function getVariable(router, trickClient) {
-    router.get('/cmd/getVariable/*', (req, res) => {
+    router.get('/data/*', (req, res) => {
 
         var oldValue = trickData;
 
@@ -26,7 +26,11 @@ function getVariable(router, trickClient) {
                 setTimeout(wait, 10);
                 return;
             }
-            res.send({"value": trickData});
+            // Trick Variable will be changed to channel format later
+            res.send({
+                "channel": trickVariable,
+                "data": trickData,
+            });
         }
 
         // Wait for new value to be updated
