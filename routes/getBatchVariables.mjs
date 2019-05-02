@@ -1,4 +1,4 @@
-import { trickData } from '../common/variables';
+import { trickData, trickVariablesTree } from '../common/variables';
 export { getBatchVariables as default };
 
 function getBatchVariables(router, trickClient) {
@@ -6,8 +6,18 @@ function getBatchVariables(router, trickClient) {
 
         var oldValue = trickData;
 
-        // Send command to Trick
-        trickClient.write(`trick.var_add(\"${trickVariable}\")\n`);
+        // List of variables to send to Trick
+        var trickVarList = "";
+
+        // Send commands to Trick
+        req.body.channels.forEach(function(variable) { 
+            // Replace '/' channel notation to dot notation
+            variable = variable.replace(/[/]/g, ".");
+            trickVarList += `trick.var_add(\"${variable}\")\n`;
+        });
+
+        // Send list of variables to Trick
+        trickClient.write(trickVarList);
 
         function wait() {
             // If old data, wait
@@ -16,7 +26,7 @@ function getBatchVariables(router, trickClient) {
                 return;
             }
             res.send({
-                "channel": trickVariable,
+                "channel": "",
                 "data": trickData,
             });
         }

@@ -29,8 +29,8 @@ function startTrickConn(){
         // Skip leading zero value, and cut off trailing new line character. Split on rest.
         data = data.toString().substring(2,data.length-2).split("\t");
 
-        // Store data, only sends first value (because this is FETCH method)
-        setTrickData(data[0]);
+        // Store data
+        setTrickData(data);
 
         // Clear Trick stream
         trickClient.pause();
