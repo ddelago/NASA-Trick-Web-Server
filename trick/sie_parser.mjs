@@ -23,7 +23,7 @@ function parseSie(trickClient) {
 	// Read S_sie XML and convert to JSON
     function readSie() {
         // trick_output.log will contain the S_sie.resource file
-        fs.readFile('./trick/S_sie.resource.log', 'utf8', function(err, contents) {
+        fs.readFile('./trick/trick_output.log', 'utf8', function(err, contents) {
             
             // Remove first line of trick_output.log (non-xml line)
             contents = contents.split('\n');
@@ -78,12 +78,11 @@ function extractElements(sieObject) {
 	// console.log("\nENUMS:\n", enumList);
 	// console.log("\nTOP LEVEL OBJECTS:\n", topLevelObjectList);
 	// console.log(trickVariables);
-	// console.log(trickVariablesTree);
+	console.log(trickVariablesTree);
 }
 
 // Recursively constuct variables and add to list
 function walkClassTree(classObject, varString, varTreeObject) {
-	
 	// If top level object (TLO)
 	if(topLevelObjectList.includes(classObject)) {
 		// Create tree object
@@ -102,7 +101,6 @@ function walkClassTree(classObject, varString, varTreeObject) {
 	classObject.member.forEach(function(member) {
 		// Kill when infinite recursion. Look into fix later when have access to ER7 sims
 		if(member.$.type == classObject.$.name) {
-			console.log("KILLED" + varString + member.$.name)
 			return; 
 		}
 
@@ -110,12 +108,11 @@ function walkClassTree(classObject, varString, varTreeObject) {
 		var varStringSplit = varString.split('.');
 		// If they are not the same length, there is a repeated class (recursion)
 		if(varStringSplit.length !== new Set(varStringSplit).size) {
-			console.log("KILLED" + varString + member.$.name)
 			return;
 		}
 
 		// Check if Enum
-		if(enumList.includes(member.$.name)) {
+		if(enumList.includes(member.$.type)) {
 			varTreeObject[member.$.name] = {};
 			return addTrickVariable(`${varString}.${member.$.name}`)
 		}
@@ -139,7 +136,6 @@ function walkClassTree(classObject, varString, varTreeObject) {
 		}
 
 		// If the primitive has no dimensions, just return 
-		console.log(varString, member.$.name)
 		varTreeObject[member.$.name] = {};
 		return addTrickVariable(`${varString}.${member.$.name}`);
 	});
@@ -159,7 +155,7 @@ function addDimensionsClass(member, varString, varTreeObject) {
 	for(var x = 0; x < Number(member.dimension[0]); x++) {
 		if(dims == 1) {
 			varTreeObject[`${member.$.name}[${x}]`] = {};
-			walkClassTree(classList[member.$.type], `${varString}.${member.$.name}[${x}]`, varTreeObject[`${varString}.${member.$.name}[${x}]`]);
+			walkClassTree(classList[member.$.type], `${varString}.${member.$.name}[${x}]`, varTreeObject[`${member.$.name}[${x}]`]);
 		}
 		
 		// If 2 dimensions
@@ -205,7 +201,7 @@ function addDimensionsPrimitive(member, varString, varTreeObject) {
 	}
 
 	// Loop over dimensions
-	for(var x = 0; x <= Number(member.dimension[0]); x++) {
+	for(var x = 0; x < Number(member.dimension[0]); x++) {
 		if(dims == 1) {
 			varTreeObject[`${member.$.name}[${x}]`] = {}
 			addTrickVariable(`${varString}.${member.$.name}[${x}]`);
