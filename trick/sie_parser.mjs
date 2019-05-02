@@ -23,7 +23,7 @@ function parseSie(trickClient) {
 	// Read S_sie XML and convert to JSON
     function readSie() {
         // trick_output.log will contain the S_sie.resource file
-        fs.readFile('./trick/trick_output.log', 'utf8', function(err, contents) {
+        fs.readFile('./trick/S_sie.resource.log', 'utf8', function(err, contents) {
             
             // Remove first line of trick_output.log (non-xml line)
             contents = contents.split('\n');
@@ -63,8 +63,12 @@ function extractElements(sieObject) {
 
 	// Get top_level_objects
 	sieObject.sie.top_level_object.forEach(function(element) {
+		// Ignore reference objects
+		if(element.$.alloc_memory_init == "0") {
+			return;
+		}
 		topLevelObjectList.push(element.$);
-		
+
 		// Begin recursive construction of variable list
 		walkClassTree(element.$, element.$.name, trickVariablesTree);
 	});
@@ -74,7 +78,7 @@ function extractElements(sieObject) {
 	// console.log("\nENUMS:\n", enumList);
 	// console.log("\nTOP LEVEL OBJECTS:\n", topLevelObjectList);
 	// console.log(trickVariables);
-	// console.log(trickVariablesTree.dyn_integloop.integ_sched);
+	// console.log(trickVariablesTree);
 }
 
 // Recursively constuct variables and add to list
@@ -96,6 +100,19 @@ function walkClassTree(classObject, varString, varTreeObject) {
 	
 	// Loop over class members
 	classObject.member.forEach(function(member) {
+		// Kill when infinite recursion. Look into fix later when have access to ER7 sims
+		if(member.$.type == classObject.$.name) {
+			console.log("KILLED" + varString + member.$.name)
+			return; 
+		}
+
+		// Kill when two classes recursively call eachother. 
+		var varStringSplit = varString.split('.');
+		// If they are not the same length, there is a repeated class (recursion)
+		if(varStringSplit.length !== new Set(varStringSplit).size) {
+			console.log("KILLED" + varString + member.$.name)
+			return;
+		}
 
 		// Check if Enum
 		if(enumList.includes(member.$.name)) {
@@ -105,6 +122,7 @@ function walkClassTree(classObject, varString, varTreeObject) {
 
 		// If class, recurse on object. DONT FORGET THAT CLASSES CAN HAVE DIMENSIONS
 		if(classList.hasOwnProperty(member.$.type) ) {
+			// If the class has dimensions
 			if(member.hasOwnProperty('dimension')) {
 				return addDimensionsClass(member, varString, varTreeObject);
 			} 
@@ -121,6 +139,7 @@ function walkClassTree(classObject, varString, varTreeObject) {
 		}
 
 		// If the primitive has no dimensions, just return 
+		console.log(varString, member.$.name)
 		varTreeObject[member.$.name] = {};
 		return addTrickVariable(`${varString}.${member.$.name}`);
 	});
