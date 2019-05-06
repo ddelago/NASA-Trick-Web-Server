@@ -7,7 +7,7 @@
 
 import fs from 'fs';
 import  xml2js  from 'xml2js';
-import { addTrickVariable, trickVariables, trickVariablesTree } from '../common/variables';
+import { trickVariablesTree } from '../common/variables';
 export { parseSie };
 
 var parser = new xml2js.Parser();
@@ -77,7 +77,6 @@ function extractElements(sieObject) {
 	// console.log("CLASSES:\n", classList);
 	// console.log("\nENUMS:\n", enumList);
 	// console.log("\nTOP LEVEL OBJECTS:\n", topLevelObjectList);
-	// console.log(trickVariables);
 	// console.log(trickVariablesTree.dyn);
 }
 
@@ -94,8 +93,7 @@ function walkClassTree(classObject, varString, varTreeObject) {
 
 	// If class has no members
 	if(classObject.member === undefined) {
-		varTreeObject[varString] = {value: varString};
-		return addTrickVariable(varString);
+		return varTreeObject[varString] = {value: varString};
 	}
 
 	// Loop over class members
@@ -114,8 +112,7 @@ function walkClassTree(classObject, varString, varTreeObject) {
 
 		// Check if Enum
 		if(enumList.includes(member.$.type)) {
-			varTreeObject[member.$.name] = {value: `${varString}.${member.$.name}`};
-			return addTrickVariable(`${varString}.${member.$.name}`)
+			return varTreeObject[member.$.name] = {value: `${varString}.${member.$.name}`};
 		}
 
 		// If class, recurse on object. DONT FORGET THAT CLASSES CAN HAVE DIMENSIONS
@@ -137,8 +134,7 @@ function walkClassTree(classObject, varString, varTreeObject) {
 		}
 
 		// If the primitive has no dimensions, just return 
-		varTreeObject[member.$.name] = {value: `${varString}.${member.$.name}`};
-		return addTrickVariable(`${varString}.${member.$.name}`);
+		return varTreeObject[member.$.name] = {value: `${varString}.${member.$.name}`};
 	});
 }
 
@@ -199,15 +195,13 @@ function addDimensionsPrimitive(member, varString, varTreeObject) {
 
 	// Weird case where dimension is ZERO
 	if(member.dimension[0] == '0' && dims == 1) {
-		varTreeObject[member.$.name] = {value: `${varString}.${member.$.name}[0]`};
-		return addTrickVariable(`${varString}.${member.$.name}[0]`);
+		return varTreeObject[member.$.name] = {value: `${varString}.${member.$.name}[0]`};
 	}
 
 	// Loop over dimensions
 	for(var x = 0; x < Number(member.dimension[0]); x++) {
 		if(dims == 1) {
-			varTreeObject[member.$.name] = {value: `${varString}.${member.$.name}[${x}]`};
-			addTrickVariable(`${varString}.${member.$.name}[${x}]`);
+			varTreeObject[`${member.$.name}[${x}]`] = {value: `${varString}.${member.$.name}[${x}]`};
 		}
 		
 		// If 2 dimensions
@@ -215,13 +209,11 @@ function addDimensionsPrimitive(member, varString, varTreeObject) {
 			// Weird case where dimension is ZERO
 			if(member.dimension[1] == '0' && dims == 2) {
 				varTreeObject[`${member.$.name}[${x}][0]`] = {value: `${varString}.${member.$.name}[${x}][0]`};
-				addTrickVariable(`${varString}.${member.$.name}[${x}][0]`);
 				continue;
 			}
 			for(var y = 0; y < Number(member.dimension[1]); y++) {
 				if(dims == 2) {
 					varTreeObject[`${member.$.name}[${x}][${y}]`] = {value: `${varString}.${member.$.name}[${x}][${y}]`};
-					addTrickVariable(`${varString}.${member.$.name}[${x}][${y}]`);
 				}
 
 				// If 3 dimensions
@@ -229,12 +221,10 @@ function addDimensionsPrimitive(member, varString, varTreeObject) {
 					// Weird case where dimension is ZERO
 					if(member.dimension[2] == '0' && dims == 3) {
 						varTreeObject[`${member.$.name}[${x}][${y}][0]`] = {value: `${varString}.${member.$.name}[${x}][${y}][0]`};
-						addTrickVariable(`${varString}.${member.$.name}[${x}][${y}][0]`);
 						continue;
 					}
 					for(var z = 0; z < Number(member.dimension[2]); z++) {
 						varTreeObject[`${member.$.name}[${x}][${y}][${z}]`] = {value: `${varString}.${member.$.name}[${x}][${y}][${z}]`};
-						addTrickVariable(`${varString}.${member.$.name}[${x}][${y}][${z}]`);
 					}
 				}
 			}

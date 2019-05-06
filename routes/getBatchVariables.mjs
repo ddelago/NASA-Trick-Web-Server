@@ -1,4 +1,4 @@
-// import { trickData, setTrickData, trickVariablesTree } from '../common/variables';
+import { trickVariablesTree } from '../common/variables';
 export { getBatchVariables as default };
 
 function getBatchVariables(router, trickClient) {

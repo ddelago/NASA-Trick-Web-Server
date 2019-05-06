@@ -8,7 +8,7 @@ import http from 'http';
 import bodyParser from 'body-parser';
 import express from 'express';
 import { router, setRoutes } from './router';
-import { config, setCommandLineArgs, setTrickData } from './common/variables';
+import { config, setCommandLineArgs } from './common/variables';
 import { trickClient, startTrickConn } from './trick/trickConnection';
 import { parseSie } from './trick/sie_parser';
 
@@ -19,7 +19,7 @@ setCommandLineArgs( process.argv.slice(2) );
 startTrickConn();
 
 // Parse S_sie.resource file from Trick to get variables
-parseSie(trickClient);  
+// parseSie(trickClient);  
 
 /************** EXPRESS SERVER START **************/
 var app = express();

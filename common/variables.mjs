@@ -6,11 +6,15 @@ var config = {
 
 var trickCommands = [];
 
-var trickVariables = [];
-function addTrickVariable(value){
-    trickVariables.push(value);
+var channelList = [];
+function addChannel(value){
+    channelList.push(value);
 }
 
+// Used to store current values needed to be fetched from Trick
+var trickVariableMap = {};
+
+// Used to store all as JSON tree
 var trickVariablesTree = {};
 
 // Command line arguements include Trick address and port
@@ -19,20 +23,13 @@ function setCommandLineArgs(value){
     commandLineArgs = value;
 }
 
-// Store data received from Trick
-var trickData = "";
-function setTrickData(value){
-    trickData = value;
-}
-
 export {
     config, 
     trickCommands, 
-    trickVariables,
-    addTrickVariable,
+    channelList,
+    addChannel,
+    trickVariableMap,
     trickVariablesTree,
     commandLineArgs,
     setCommandLineArgs,
-    trickData,
-    setTrickData,
 };
