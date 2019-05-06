@@ -1,4 +1,4 @@
-import { trickData, trickVariablesTree } from '../common/variables';
+// import { trickData, setTrickData, trickVariablesTree } from '../common/variables';
 export { getBatchVariables as default };
 
 function getBatchVariables(router, trickClient) {
@@ -17,14 +17,33 @@ function getBatchVariables(router, trickClient) {
         // Send list of variables to Trick
         trickClient.write(trickVarList);
         
+        var trickData = "";
+
+        // Get response from Trick. MODIFY THIS LATER TO WAIT FOR RESPONSE FROM TRICK RATHER THAN LOOPING WAITING FOR VARIABLE TO CHANGE
+        trickClient.on('data', function(data) {
+            
+            // Skip leading zero value, and cut off trailing new line character. Split on rest.
+            trickData = data.toString().substring(2,data.length-1).split("\t");
+
+            // Clear Trick stream
+            trickClient.pause();
+            trickClient.write('trick.var_clear()\n');
+            trickClient.resume();
+        });
+
         function reply() {
-            res.send({
-                "channel": req.body.channels,
-                "data": trickData,
-            });
+            // Wait for new value to be updated.
+            if(trickData == "") {
+                setTimeout(reply, 1)
+            }
+            else {
+                res.send({
+                    "channel": req.body.channels,
+                    "data": trickData,
+                });
+            }
         }
 
-        // Wait for new value to be updated.
-        setTimeout(reply, 100);
+        reply();
    });
 }
