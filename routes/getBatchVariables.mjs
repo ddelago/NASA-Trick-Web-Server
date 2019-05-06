@@ -4,8 +4,6 @@ export { getBatchVariables as default };
 function getBatchVariables(router, trickClient) {
     router.post('/data', (req, res) => {
 
-        var oldValue = trickData;
-
         // List of variables to send to Trick
         var trickVarList = "";
 
@@ -18,20 +16,15 @@ function getBatchVariables(router, trickClient) {
 
         // Send list of variables to Trick
         trickClient.write(trickVarList);
-
-        function wait() {
-            // If old data, wait
-            if(trickData === oldValue) {
-                setTimeout(wait, 10);
-                return;
-            }
+        
+        function reply() {
             res.send({
-                "channel": "",
+                "channel": req.body.channels,
                 "data": trickData,
             });
         }
 
-        // Wait for new value to be updated
-        wait();
+        // Wait for new value to be updated.
+        setTimeout(reply, 100);
    });
 }

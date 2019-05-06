@@ -5,14 +5,14 @@ import getVariable from './routes/getVariable';
 import getBatchVariables from './routes/getBatchVariables';
 import addVariable from './routes/addVariable';
 import getVariableList from './routes/getVariableList';
-import getTrickCommands from './routes/getTrickCommands';
+import setVariable from './routes/setVariable';
 
 export { router, setRoutes };
 
 function setRoutes(trickClient) {
     getVariable(router, trickClient);
+    setVariable(router, trickClient);
     getBatchVariables(router, trickClient);
-    // addVariable(router, trickClient);
     getVariableList(router, trickClient);
-    getTrickCommands(router, trickClient);
+    // addVariable(router, trickClient);
 }

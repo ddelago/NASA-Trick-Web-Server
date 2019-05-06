@@ -18,7 +18,7 @@ var topLevelObjectList = [];
 function parseSie(trickClient) {
 
     // Get list of variables
-    trickClient.write(`trick.send_sie_resource()\n`);
+	trickClient.write(`trick.send_sie_resource()\n`);
 	
 	// Read S_sie XML and convert to JSON
     function readSie() {
