@@ -13,7 +13,7 @@ function getOptions(router, trickClient) {
         var channelSegs = trickVariableChannel.split('/');
         var lastChannelSeg = channelSegs[channelSegs.length - 1];
 
-        // Reconstruct into Trick string  
+        // Reconstruct into dot object notation string  
         var varString = "";
         for(var i = 0; i < channelSegs.length - 1; i++) {
             varString += (channelSegs[i] + '.'); 
@@ -53,7 +53,7 @@ function getChannelSegments(channelObject, channelSegment, channelList) {
 
     // If Channel segment has no subchannels
     if(channelMembers.length == 1 && channelMembers[0] == 'trickVarString') {
-        return channelList.push(`${channelSegment}`);;
+        return channelList.push(`${channelSegment}`);
     }
     
     // Recurse on subchannels

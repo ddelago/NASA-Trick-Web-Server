@@ -77,7 +77,7 @@ function extractElements(sieObject) {
 	// console.log("CLASSES:\n", classList);
 	// console.log("\nENUMS:\n", enumList);
 	// console.log("\nTOP LEVEL OBJECTS:\n", topLevelObjectList);
-	console.log(trickVariableTree.dyn);
+	// console.log(trickVariableTree.dyn);
 }
 
 // Recursively constuct variables and add to list
