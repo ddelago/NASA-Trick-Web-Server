@@ -6,7 +6,7 @@
 
 import net from 'net';
 import fs from 'fs';
-import { commandLineArgs as args, trickVariableMap, channelList, sieParsed } from '../common/variables';
+import { commandLineArgs as args, trickVariableMap, channelList, sieParsed, removeChannel } from '../common/variables';
 export { trickClient, startTrickConn };
 
 var trickClient = new net.Socket();
@@ -35,6 +35,11 @@ function startTrickConn(){
     
             // Assign data to Trick map
             for(var i = 0; i < trickData.length; i++) {
+                // Remove invalid variables
+                if(trickData[i] == 'BAD_REF') {
+                    delete trickVariableMap[channelList[i]];    
+                    removeChannel(channelList[i]);
+                }
                 trickVariableMap[channelList[i]] = trickData[i];
             }
     

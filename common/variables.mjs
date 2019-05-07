@@ -13,10 +13,7 @@ function sieIsParsed(value) {
 
 var channelList = [];
 function addChannel(value){
-    // if channelList does not already include the value
-    if(!channelList.includes(value)) {
-        channelList.push(value);
-    }
+    channelList.push(value);
 }
 function removeChannel(value) {
     var index = channelList.indexOf(value);
@@ -33,6 +30,10 @@ function clearChannels() {
 var trickVariableMap = {};
 function clearMap() {
     trickVariableMap = {};
+}
+
+function addVariableMap(value) {
+    trickVariableMap[value] = "";
 }
 
 // Used to store all as JSON tree
@@ -54,6 +55,7 @@ export {
     addChannel,
     removeChannel,
     trickVariableMap,
+    addVariableMap,
     clearMap,
     trickVariableTree,
     commandLineArgs,

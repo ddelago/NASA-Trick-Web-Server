@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { channelList, addChannel, trickVariableMap, trickVariableTree } from '../../common/variables';
+import { channelList, addChannel, trickVariableMap, addVariableMap, trickVariableTree } from '../../common/variables';
 export { putChannelBatch as default };
 
 function putChannelBatch(router, trickClient) {
@@ -53,12 +53,13 @@ function putRequest(request, trickClient) {
     // Replace '/' channel notation to dot notation
     var trickVariable = trickVariableChannel.replace(/[/]/g, ".");
 
-    // Send to Trick
-    trickClient.write(`trick.var_add(\"${trickVariable}\")\n`);
-
-    // Update channel list and variable map
-    addChannel(trickVariableChannel)
-    trickVariableMap[trickVariableChannel] = "";
+    // Send to Trick if it does not exist already
+    if(!channelList.includes(trickVariableChannel)) {
+        trickClient.write(`trick.var_add(\"${trickVariable}\")\n`);
+        // Update channel list and variable map
+        addChannel(trickVariableChannel)
+        addVariableMap(trickVariableChannel);
+    }
 }
 
 // Recursively build subchannels and add them to channelList
@@ -70,12 +71,13 @@ function getChannelSegments(channelObject, channelSegment, trickClient) {
         // Replace '/' channel notation to dot notation
         var trickVariable = channelSegment.replace(/[/]/g, ".");
 
-        // Send to Trick
-        trickClient.write(`trick.var_add(\"${trickVariable}\")\n`);
-
-        addChannel(`${channelSegment}`);
-        trickVariableMap[`${channelSegment}`] = "";
-        
+        // Send to Trick if it does not exist already
+        if(!channelList.includes(`${channelSegment}`)) {
+            trickClient.write(`trick.var_add(\"${trickVariable}\")\n`);
+            // Update channel list and variable map
+            addChannel(`${channelSegment}`);
+            addVariableMap(`${channelSegment}`);
+        }
         return;
     }
     
