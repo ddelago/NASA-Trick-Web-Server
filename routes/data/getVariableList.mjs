@@ -1,4 +1,4 @@
-import { trickVariablesTree } from '../common/variables';
+import { trickVariablesTree } from '../../common/variables';
 export { getVariableList as default };
 
 function getVariableList(router, trickClient) {

@@ -1,20 +1,22 @@
 import express from 'express';
 const router = express.Router();
 
-import getVariable from './routes/getVariable';
-import getBatchVariables from './routes/getBatchVariables';
-import getVariableList from './routes/getVariableList';
-import setVariable from './routes/setVariable';
-import putChannel from './routes/putChannel';
-import putChannelBatch from './routes/putChannelBatch';
+import getVariable from './routes/data/getVariable';
+import getBatchVariables from './routes/data/getBatchVariables';
+import getVariableList from './routes/data/getVariableList';
+import putChannel from './routes/data/putChannel';
+import putChannelBatch from './routes/data/putChannelBatch';
+import setVariable from './routes/cmd/setVariable';
+import clearVariables from './routes/cmd/clearVariables';
 
 export { router, setRoutes };
 
 function setRoutes(trickClient) {
     getVariable(router, trickClient);
-    setVariable(router, trickClient);
     getBatchVariables(router, trickClient);
     getVariableList(router, trickClient);
     putChannel(router, trickClient);
     putChannelBatch(router, trickClient);
+    setVariable(router, trickClient);
+    clearVariables(router, trickClient);
 }

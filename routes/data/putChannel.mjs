@@ -1,4 +1,4 @@
-import { channelList, addChannel, trickVariableMap } from '../common/variables';
+import { channelList, addChannel, trickVariableMap } from '../../common/variables';
 export { putChannel as default };
 
 function putChannel(router, trickClient) {

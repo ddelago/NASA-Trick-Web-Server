@@ -1,4 +1,4 @@
-import { trickVariableMap } from '../common/variables';
+import { trickVariableMap } from '../../common/variables';
 export { getVariable as default };
 
 // Get a variable's current value from Trick
