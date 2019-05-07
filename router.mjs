@@ -6,7 +6,7 @@ import putChannel from './routes/data/putChannel';
 import setVariable from './routes/cmd/setVariable';
 import clearVariables from './routes/cmd/clearVariables';
 import getOptions from './routes/options/getOptions';
-import deleteChannel from './routes/options/deleteChannel';
+import deleteChannel from './routes/delete/deleteChannel';
 
 const router = express.Router();
 

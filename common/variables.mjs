@@ -18,6 +18,13 @@ function addChannel(value){
         channelList.push(value);
     }
 }
+function removeChannel(value) {
+    var index = channelList.indexOf(value);
+    if (index > -1) {
+        channelList.splice(index, 1);
+    }
+}
+
 function clearChannels() {
     channelList = [];
 }
@@ -45,6 +52,7 @@ export {
     channelList,
     clearChannels,
     addChannel,
+    removeChannel,
     trickVariableMap,
     clearMap,
     trickVariableTree,
