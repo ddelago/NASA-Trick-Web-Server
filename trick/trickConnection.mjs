@@ -6,7 +6,7 @@
 
 import net from 'net';
 import fs from 'fs';
-import { commandLineArgs as args, trickVariableMap, channelList } from '../common/variables';
+import { commandLineArgs as args, trickVariableMap, channelList, sieParsed } from '../common/variables';
 export { trickClient, startTrickConn };
 
 var trickClient = new net.Socket();
@@ -22,18 +22,24 @@ function startTrickConn(){
 
     // Get data from Trick, set polling frequency later
     trickClient.on('data', function(data) {
+
         // Log Trick (used to store very large S_sie.resource file)
-        log_file.write(data);
-
-        // Skip leading zero value, and cut off trailing new line character. Split on rest.
-        var trickData = data.toString().substring(2,data.length-1).split("\t");
-
-        // Assign data to Trick map
-        for(var i = 0; i < trickData.length; i++) {
-            trickVariableMap[channelList[i]] = trickData[i];
+        if(!sieParsed) {
+            log_file.write(data);
         }
 
-        console.log(trickVariableMap)
+        // After sie is parsed, start performing commands below
+        else {
+            // Skip leading zero value, and cut off trailing new line character. Split on rest.
+            var trickData = data.toString().substring(2,data.length-1).split("\t");
+    
+            // Assign data to Trick map
+            for(var i = 0; i < trickData.length; i++) {
+                trickVariableMap[channelList[i]] = trickData[i];
+            }
+    
+            console.log(trickVariableMap)
+        }
     });
 
     trickClient.on('close', function() {

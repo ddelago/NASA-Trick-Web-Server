@@ -7,7 +7,7 @@
 
 import fs from 'fs';
 import  xml2js  from 'xml2js';
-import { trickVariableTree } from '../common/variables';
+import { trickVariableTree, sieIsParsed } from '../common/variables';
 export { parseSie };
 
 var parser = new xml2js.Parser();
@@ -38,7 +38,9 @@ function parseSie(trickClient) {
             // Parse XML and store as JSON object
             parser.parseString(xmlString, function (err, result) {
                 extractElements(result);
-            });
+			});
+			
+			sieIsParsed(true);
         });
     } 
 
@@ -139,6 +141,7 @@ function walkClassTree(classObject, varString, varTreeObject) {
 }
 
 /****** FIX DIMENSIONS TO AVOID RECURSION ON EACH DIMENSION BECAUSE ITS ALL THE SAME ******/
+// DONT FORGET THAT TLO CAN HAVE DIMENSIONS******************************************************************
 
 // Add dimensions to class
 function addDimensionsClass(member, varString, varTreeObject) {

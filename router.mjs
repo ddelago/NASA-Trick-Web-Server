@@ -1,16 +1,14 @@
 import express from 'express';
-const router = express.Router();
-
-// data
 import getVariable from './routes/data/getVariable';
 import getBatchVariables from './routes/data/getBatchVariables';
 import getVariableList from './routes/data/getVariableList';
 import putChannel from './routes/data/putChannel';
-// commands
 import setVariable from './routes/cmd/setVariable';
 import clearVariables from './routes/cmd/clearVariables';
-// options
 import getOptions from './routes/options/getOptions';
+import deleteChannel from './routes/options/deleteChannel';
+
+const router = express.Router();
 
 export { router, setRoutes };
 
@@ -22,4 +20,5 @@ function setRoutes(trickClient) {
     setVariable(router, trickClient);
     clearVariables(router, trickClient);
     getOptions(router, trickClient);
+    deleteChannel(router, trickClient);
 }

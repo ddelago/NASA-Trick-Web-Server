@@ -6,9 +6,17 @@ var config = {
 
 var trickCommands = [];
 
+var sieParsed = false;
+function sieIsParsed(value) {
+    sieParsed = true;
+}
+
 var channelList = [];
 function addChannel(value){
-    channelList.push(value);
+    // if channelList does not already include the value
+    if(!channelList.includes(value)) {
+        channelList.push(value);
+    }
 }
 function clearChannels() {
     channelList = [];
@@ -31,6 +39,8 @@ function setCommandLineArgs(value){
 
 export {
     config, 
+    sieParsed,
+    sieIsParsed,
     trickCommands, 
     channelList,
     clearChannels,

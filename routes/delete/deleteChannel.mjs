@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import { channelList, addChannel, trickVariableMap, trickVariableTree } from '../../common/variables';
-export { putChannel as default };
+export { deleteChannel as default };
 
-function putChannel(router, trickClient) {
+function deleteChannel(router, trickClient) {
     router.put('/data/*', (req, res) => {
 
         // Extract trick variable from url
