@@ -21,7 +21,7 @@ function clearMap() {
 }
 
 // Used to store all as JSON tree
-var trickVariablesTree = {};
+var trickVariableTree = {};
 
 // Command line arguements include Trick address and port
 var commandLineArgs = "";
@@ -37,7 +37,7 @@ export {
     addChannel,
     trickVariableMap,
     clearMap,
-    trickVariablesTree,
+    trickVariableTree,
     commandLineArgs,
     setCommandLineArgs,
 };

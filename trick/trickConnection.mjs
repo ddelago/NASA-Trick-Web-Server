@@ -23,7 +23,7 @@ function startTrickConn(){
     // Get data from Trick, set polling frequency later
     trickClient.on('data', function(data) {
         // Log Trick (used to store very large S_sie.resource file)
-        // log_file.write(data);
+        log_file.write(data);
 
         // Skip leading zero value, and cut off trailing new line character. Split on rest.
         var trickData = data.toString().substring(2,data.length-1).split("\t");
@@ -33,7 +33,7 @@ function startTrickConn(){
             trickVariableMap[channelList[i]] = trickData[i];
         }
 
-        console.log(trickVariableMap)
+        // console.log(trickVariableMap)
     });
 
     trickClient.on('close', function() {

@@ -19,7 +19,7 @@ setCommandLineArgs( process.argv.slice(2) );
 startTrickConn();
 
 // Parse S_sie.resource file from Trick to get variables
-// parseSie(trickClient);  
+parseSie(trickClient);  
 
 /************** EXPRESS SERVER START **************/
 var app = express();
