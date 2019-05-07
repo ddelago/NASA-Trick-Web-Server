@@ -1,20 +1,23 @@
 import _ from 'lodash';
-import { channelList, addChannel, trickVariableMap, trickVariableTree } from '../../common/variables';
-export { putChannelBatch as default };
+import { removeChannel, trickVariableMap, trickVariableTree } from '../../common/variables';
+export { deleteChannelBatch as default };
 
-function putChannelBatch(router, trickClient) {
-    router.put('/data', (req, res) => {
+function deleteChannelBatch(router, trickClient) {
+    router.delete('/data', (req, res) => {
+
+        var channelsRemoved = [];
 
         req.body.forEach(function(request) {
-            putRequest(request, trickClient);
+            deleteRequest(request, trickClient, channelsRemoved);
         });
 
         // Response to client
-        res.send(channelList)
+        res.send(channelsRemoved);
    });
 }
 
-function putRequest(request, trickClient) {
+function deleteRequest(request, trickClient, channelsRemoved) {
+
     // Extract trick variable from url
     var trickVariableChannel = request;
 
@@ -44,7 +47,7 @@ function putRequest(request, trickClient) {
 
         // Build the subchannels 
         Object.keys(topChannel).forEach(function (member) {
-            getChannelSegments(topChannel[member], `${trickVariableChannel.substring(0, trickVariableChannel.length - 1)}${member}`, trickClient);
+            getChannelSegments(topChannel[member], `${trickVariableChannel.substring(0, trickVariableChannel.length - 1)}${member}`, trickClient, channelsRemoved);
         });
 
         return;
@@ -54,15 +57,16 @@ function putRequest(request, trickClient) {
     var trickVariable = trickVariableChannel.replace(/[/]/g, ".");
 
     // Send to Trick
-    trickClient.write(`trick.var_add(\"${trickVariable}\")\n`);
+    trickClient.write(`trick.var_remove(\"${trickVariable}\")\n`);
 
     // Update channel list and variable map
-    addChannel(trickVariableChannel)
-    trickVariableMap[trickVariableChannel] = "";
+    channelsRemoved.push(trickVariableChannel);
+    removeChannel(trickVariableChannel);
+    delete trickVariableMap[trickVariableChannel];
 }
 
 // Recursively build subchannels and add them to channelList
-function getChannelSegments(channelObject, channelSegment, trickClient) {
+function getChannelSegments(channelObject, channelSegment, trickClient, channelsRemoved) {
     var channelMembers = Object.keys(channelObject);
 
     // If Channel segment has no subchannels
@@ -71,10 +75,11 @@ function getChannelSegments(channelObject, channelSegment, trickClient) {
         var trickVariable = channelSegment.replace(/[/]/g, ".");
 
         // Send to Trick
-        trickClient.write(`trick.var_add(\"${trickVariable}\")\n`);
+        trickClient.write(`trick.var_remove(\"${trickVariable}\")\n`);
 
-        addChannel(`${channelSegment}`);
-        trickVariableMap[`${channelSegment}`] = "";
+        channelsRemoved.push(`${channelSegment}`);
+        removeChannel(`${channelSegment}`);
+        delete trickVariableMap[`${channelSegment}`];
         
         return;
     }
