@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { channelList, addChannel, addVariableMap, trickVariableMap, trickVariableTree } from '../../common/variables';
+import { channelList, addChannel, addVariableMap, trickVariableTree } from '../../common/variables';
 export { putChannel as default };
 
 function putChannel(router, trickClient) {
@@ -11,48 +11,75 @@ function putChannel(router, trickClient) {
         // Get channel segments
         var channelSegs = trickVariableChannel.split('/');
         var lastChannelSeg = channelSegs[channelSegs.length - 1];
+
+        // If not a recursive call
+        if(lastChannelSeg != '**' && lastChannelSeg != '*') {
+            // Replace '/' channel notation to dot notation
+            var trickVariable = trickVariableChannel.replace(/[/]/g, ".");
+
+            // Send to Trick if it does not exist already
+            if(!channelList.includes(trickVariableChannel)) {
+                trickClient.write(`trick.var_add(\"${trickVariable}\")\n`);
+                // Update channel list and variable map
+                addChannel(trickVariableChannel)
+                addVariableMap(trickVariableChannel);
+            }
+
+            // Response to client
+            return res.send(channelList)
+        }
         
+        // Reconstruct into dot object notation string  
+        var varString = "";
+        for(var i = 0; i < channelSegs.length - 1; i++) {
+            varString += (channelSegs[i] + '.'); 
+        }
+        // cut off trailing dot
+        varString = varString.substring(0, varString.length - 1);
+
+        // Get top level channel object
+        var topChannel = {}
+        if(varString == '')
+            topChannel = trickVariableTree; 
+        else
+            topChannel = _.get(trickVariableTree, varString);
+
         // If recursive call
-        if(lastChannelSeg == '*') {
-
-            // Reconstruct into dot object notation string  
-            var varString = "";
-            for(var i = 0; i < channelSegs.length - 1; i++) {
-                varString += (channelSegs[i] + '.'); 
-            }
-            // cut off trailing dot
-            varString = varString.substring(0, varString.length - 1);
-
-            // Get top level channel object
-            var topChannel = {}
-            if(varString == '') {
-                topChannel = trickVariableTree;
-            } 
-            else {
-                topChannel = _.get(trickVariableTree, varString);
-            }
-
+        if(lastChannelSeg == '**') {
             // Build the subchannels 
             Object.keys(topChannel).forEach(function (member) {
-                getChannelSegments(topChannel[member], `${trickVariableChannel.substring(0, trickVariableChannel.length - 1)}${member}`, trickClient);
+                getChannelSegments(topChannel[member], `${trickVariableChannel.substring(0, trickVariableChannel.length - 2)}${member}`, trickClient);
             });
+            return res.send(channelList);
+        } 
+        // If only top level recursive call
+        else if(lastChannelSeg == '*') {
+            var channelMembers = Object.keys(topChannel);
 
+            // Check each member of the top level channel
+            channelMembers.forEach(function(member) {
+
+                var childChannelMembers = Object.keys(topChannel[member])
+
+                // If the subchannel has no subchannels
+                if(childChannelMembers.length == 1 && childChannelMembers[0] == 'trickVarString') {
+                    // Constructed variable channel
+                    var channelSegment = `${trickVariableChannel.substring(0, trickVariableChannel.length - 1)}${member}`
+
+                    // Replace '/' channel notation to dot notation
+                    var trickVariable = channelSegment.replace(/[/]/g, ".");
+
+                    // Send to Trick if it does not exist already
+                    if(!channelList.includes(`${channelSegment}`)) {
+                        trickClient.write(`trick.var_add(\"${trickVariable}\")\n`);
+                        addChannel(`${channelSegment}`);
+                        addVariableMap(`${channelSegment}`);
+                    }
+                }
+            });
+            
             return res.send(channelList);
         }
-
-        // Replace '/' channel notation to dot notation
-        var trickVariable = trickVariableChannel.replace(/[/]/g, ".");
-
-        // Send to Trick if it does not exist already
-        if(!channelList.includes(trickVariableChannel)) {
-            trickClient.write(`trick.var_add(\"${trickVariable}\")\n`);
-             // Update channel list and variable map
-            addChannel(trickVariableChannel)
-            addVariableMap(trickVariableChannel);
-        }
-
-        // Response to client
-        res.send(channelList)
    });
 }
 

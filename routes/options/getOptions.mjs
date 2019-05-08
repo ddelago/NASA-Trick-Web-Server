@@ -23,12 +23,10 @@ function getOptions(router, trickClient) {
 
         // Get top level channel object
         var topChannel = {}
-        if(varString == '') {
+        if(varString == '')
             topChannel = trickVariableTree;
-        } 
-        else {
+        else
             topChannel = _.get(trickVariableTree, varString);
-        }
 
         // If recursive
         if (lastChannelSeg == '**') {

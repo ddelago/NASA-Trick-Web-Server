@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { channelList, removeChannel, trickVariableMap, trickVariableTree } from '../../common/variables';
+import { removeChannel, trickVariableMap, trickVariableTree } from '../../common/variables';
 export { deleteChannel as default };
 
 var channelsRemoved = [];
@@ -19,7 +19,7 @@ function deleteChannel(router, trickClient) {
         // If recursive call
         if(lastChannelSeg == '*') {
 
-            // Reconstruct into dot object notation string  
+            // Reconstruct into dot object notation string 
             var varString = "";
             for(var i = 0; i < channelSegs.length - 1; i++) {
                 varString += (channelSegs[i] + '.'); 
@@ -29,12 +29,10 @@ function deleteChannel(router, trickClient) {
 
             // Get top level channel object
             var topChannel = {}
-            if(varString == '') {
+            if(varString == '')
                 topChannel = trickVariableTree;
-            } 
-            else {
+            else
                 topChannel = _.get(trickVariableTree, varString);
-            }
 
             // Build the subchannels 
             Object.keys(topChannel).forEach(function (member) {

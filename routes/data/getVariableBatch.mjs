@@ -1,7 +1,7 @@
 import { trickVariableMap } from '../../common/variables';
-export { getBatchVariables as default };
+export { getVariableBatch as default };
 
-function getBatchVariables(router, trickClient) {
+function getVariableBatch(router, trickClient) {
     router.post('/data', (req, res) => {
 
         // List of variable values

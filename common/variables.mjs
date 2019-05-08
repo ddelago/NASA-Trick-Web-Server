@@ -11,6 +11,7 @@ function sieIsParsed(value) {
     sieParsed = true;
 }
 
+// Used to iterate through incoming Trick data
 var channelList = [];
 function addChannel(value){
     channelList.push(value);
