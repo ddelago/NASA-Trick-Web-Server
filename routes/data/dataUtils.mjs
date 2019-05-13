@@ -38,8 +38,9 @@ function putRequest(channel, trickClient) {
     var topChannel = {}
     if(varString == '')
         topChannel = trickVariableTree; 
+    // Gets the channel object from the variable string
     else
-        topChannel = _.get(trickVariableTree, varString);
+        topChannel = _.get(trickVariableTree, varString); 
 
     // If recursive call
     if(lastChannelSeg == '**') {
