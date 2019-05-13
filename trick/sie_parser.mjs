@@ -234,3 +234,88 @@ function addDimensionsPrimitive(member, varString, varTreeObject) {
 		}
 	}
 }
+
+function addDimensions(varString, varTreeObject, dimLocations, dimensions) {
+	var segments = varString.split(".");
+	var segmentDimensionList = [];
+	var varList = [];
+
+	for(var i = 0; i < dimLocations.length; i++) {
+		segmentDimensionList.push(addDimensionsSegment(segments[dimLocations[i]], dimensions[i]));
+	}
+
+	buildVariable("", 0);
+
+	function buildVariable(varString, n) {
+		var segment = segments[n]
+
+		// Base case, add variable
+		if(segments.length - n == 0) {
+			varList.push(varString);
+			// varTreeObject[`${member.$.name}[${x}][${y}][${z}]`] = {trickVarString: `${varString}.${member.$.name}[${x}][${y}][${z}]`};
+		}
+
+		var segmentIndex = segments.indexOf(segment);
+
+		// If the segment has dimensions
+		if(dimLocations.includes(segmentIndex)) {
+			// Get the appropriate array from the list and recurse on each
+			segmentDimensionList[dimLocations.indexOf(segmentIndex)].forEach(function(segmentDimension) {
+				buildVariable(`${varString}.${segmentDimension}`, n+1);
+			})
+		}
+
+		else {
+			buildVariable(`${varString}.${segment}`, n+1);
+		}
+	}
+
+	console.log(varList);
+}
+
+// Returns a list with dimensions added to the variable segment
+function addDimensionsSegment(segment, dimensions) {
+	var dims = dimensions.length;
+	var segmentList = [];
+
+	// Weird case where dimension is ZERO
+	if(segment.dimension[0] == '0' && dims == 1) {
+		segmentList.push(`${segment}[0]`);
+		return segmentList;
+	}
+
+	// Loop over dimensions
+	for(var x = 0; x < Number(segment.dimension[0]); x++) {
+		if(dims == 1) {
+			segmentList.push(`${segment}[${x}]`);
+		}
+		
+		// If 2 dimensions
+		else {
+			// Weird case where dimension is ZERO
+			if(segment.dimension[1] == '0' && dims == 2) {
+				segmentList.push(`${segment}[${x}][0]`);
+				continue;
+			}
+			for(var y = 0; y < Number(segment.dimension[1]); y++) {
+				if(dims == 2) {
+					segmentList.push(`${segment}[${x}][${y}]`);
+				}
+
+				// If 3 dimensions
+				else {
+					// Weird case where dimension is ZERO
+					if(segment.dimension[2] == '0' && dims == 3) {
+						segmentList.push(`${segment}[${x}][${y}][0]`);
+						continue;
+					}
+					for(var z = 0; z < Number(segment.dimension[2]); z++) {
+						segmentList.push(`${segment}[${x}][${y}][${z}]`);
+					}
+				}
+			}
+		}
+	}
+
+	return segmentList;
+}
