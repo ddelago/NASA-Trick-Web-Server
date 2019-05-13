@@ -1,7 +1,7 @@
 
-export { setvariable as default };
+export { setVariable as default };
 
-function setvariable(router, trickClient) {
+function setVariable(router, trickClient) {
     router.post('/cmd/setVariable/*', (req, res) => {
 
         // Extract trick variable from url
@@ -10,11 +10,9 @@ function setvariable(router, trickClient) {
         // Replace '/' channel notation to dot notation
         var trickVariable = trickVariableChannel.replace(/[/]/g, ".");
 
-        console.log(req.body)
+        // Update value
+        trickClient.write(`trick.var_set(\"${trickVariable}\", ${req.body.value})\n`);
 
-        // List of variables to send to Trick
-        var trickVarList = "";
-        trickVarList += `trick.var_set(\"${trickVariable}\", ${0})\n`;
-        trickClient.write(trickVarList);
+        res.send("SUCCESS")
    });
 }
