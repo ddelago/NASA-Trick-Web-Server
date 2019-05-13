@@ -1,4 +1,4 @@
-import { trickVariableMap } from '../../common/variables';
+import { trickVariableMap, addChannel, addVariableMap } from '../../common/variables';
 export { getVariableBatch as default };
 
 function getVariableBatch(router, trickClient) {
@@ -9,7 +9,26 @@ function getVariableBatch(router, trickClient) {
 
         // Get values from the variable map
         req.body.channels.forEach(function(variable) { 
-            trickData.push(trickVariableMap[variable]);
+            
+            // If not in Map, it was not added to the stream so just fetch directly.
+            if(!(variable in trickVariableMap)) {
+                // Replace '/' channel notation to dot notation
+                var trickVariable = variable.replace(/[/]/g, ".");
+
+                // Send command to Trick
+                trickClient.write(`trick.var_add(\"${trickVariable}\")\n`);
+
+                // Update channel list and variable map
+                addChannel(variable)
+                addVariableMap(variable);
+                
+                trickData.push(trickVariableMap[variable]);
+            }
+            // Else it is so just add it
+            else {
+                trickData.push(trickVariableMap[variable]);
+            }
+
         });
 
         res.send({
@@ -18,7 +37,6 @@ function getVariableBatch(router, trickClient) {
         });
    });
 }
-
 
 // FETCH VERSION
 // function getBatchVariables(router, trickClient) {

@@ -36,6 +36,8 @@ function startTrickConn(){
                 trickVariableMap[channelList[i]] = trickData[i];
             }
         }
+
+        console.log(trickVariableMap)
     });
 
     trickClient.on('close', function() {

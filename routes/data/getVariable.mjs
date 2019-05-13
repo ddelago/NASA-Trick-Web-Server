@@ -9,7 +9,6 @@ function getVariable(router, trickClient) {
         var trickVariableChannel = req.url.substring(6);
 
         // If not in Map, it was not added to the stream so just fetch directly.
-        // Would it then be added to the stream?
         if(!(trickVariableChannel in trickVariableMap)) {
             // Replace '/' channel notation to dot notation
             var trickVariable = trickVariableChannel.replace(/[/]/g, ".");
@@ -21,8 +20,8 @@ function getVariable(router, trickClient) {
             addChannel(trickVariableChannel)
             addVariableMap(trickVariableChannel);
             
-            // Response to client NOTE THAT IT WILL TAKE TIME TO RECEIVE A RESPONSE FROM TRICK
-            return sendDelayedResponse(res, trickVariableChannel);
+            // Skip delay to avoid any errors that may occurr and reduce latency
+            // return sendDelayedResponse(res, trickVariableChannel);
         }
 
         res.send({
@@ -32,14 +31,14 @@ function getVariable(router, trickClient) {
    });
 }
 
-function sendDelayedResponse(res, trickVariableChannel) {
-    if(trickVariableMap[trickVariableChannel] == '') {
-        return setTimeout(sendDelayedResponse, 2, res, trickVariableChannel);
-    }
-    else {
-        res.send({
-            "channel": trickVariableChannel,
-            "data": trickVariableMap[trickVariableChannel]
-        });
-    }
-}
+// function sendDelayedResponse(res, trickVariableChannel) {
+//     if(trickVariableMap[trickVariableChannel] == '') {
+//         return setTimeout(sendDelayedResponse, 2, res, trickVariableChannel);
+//     }
+//     else {
+//         res.send({
+//             "channel": trickVariableChannel,
+//             "data": trickVariableMap[trickVariableChannel]
+//         });
+//     }
+// }
