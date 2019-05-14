@@ -78,7 +78,7 @@ function extractElements(sieObject) {
 	// console.log(classList['Satellite'].member[0]);
 	// console.log("CLASSES:\n", classList);
 	// console.log("\nENUMS:\n", enumList);
-	// console.log("\nTOP LEVEL OBJECTS:\n", topLevelObjectList);
+	console.log("\nTOP LEVEL OBJECTS:\n", topLevelObjectList);
 	// console.log(trickVariableTree.dyn);
 }
 
@@ -86,11 +86,24 @@ function extractElements(sieObject) {
 function walkClassTree(classObject, varString, varTreeObject, dimLocations, dimensions) {
 	// If top level object (TLO)
 	if(topLevelObjectList.includes(classObject)) {
-		// Create tree object
-		varTreeObject[varString] = {};
+		// If the TLO has dimensions
+		if(classObject.hasOwnProperty('dimension')) {
+			
+			dimLocations.push(classObject.name);
+			dimensions.push(classObject.dimension);
 
-		// Walk the class that equals the TLO type
-		return walkClassTree(classList[classObject.type], varString, varTreeObject[varString], [], []);
+			// Create tree object
+			varTreeObject[varString] = {};
+
+			// Walk the class that equals the TLO type
+			return walkClassTree(classList[classObject.type], varString, varTreeObject[varString], dimLocations, dimensions);
+		} 
+		else {
+			// Create tree object
+			varTreeObject[varString] = {};
+			// Walk the class that equals the TLO type
+			return walkClassTree(classList[classObject.type], varString, varTreeObject[varString], dimLocations, dimensions);
+		}
 	}
 
 	// If class has no members
@@ -112,9 +125,10 @@ function walkClassTree(classObject, varString, varTreeObject, dimLocations, dime
 			return;
 		}
 
-		/* ADD DIMENSION INCLUDESSS HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE */
 		// Check if Enum
 		if(enumList.includes(member.$.type)) {
+			// Add dimensions to variables
+			addDimensions(member, `${varString}.${member.$.name}`, dimLocations, dimensions);
 			return varTreeObject[member.$.name] = {trickVarString: `${varString}.${member.$.name}`};
 		}
 
@@ -125,11 +139,11 @@ function walkClassTree(classObject, varString, varTreeObject, dimLocations, dime
 				dimLocations.push(member.$.name);
 				dimensions.push(member.dimension);
 				varTreeObject[member.$.name] = {};
-				return walkClassTree(classList[member.$.type], `${varString}.${member.$.name}`, varTreeObject[member.$.name], [], []);
+				return walkClassTree(classList[member.$.type], `${varString}.${member.$.name}`, varTreeObject[member.$.name], dimLocations, dimensions);
 			} 
 			else {
 				varTreeObject[member.$.name] = {};
-				return walkClassTree(classList[member.$.type], `${varString}.${member.$.name}`, varTreeObject[member.$.name], [], []);
+				return walkClassTree(classList[member.$.type], `${varString}.${member.$.name}`, varTreeObject[member.$.name], dimLocations, dimensions);
 			}
 		}
 		
@@ -140,15 +154,12 @@ function walkClassTree(classObject, varString, varTreeObject, dimLocations, dime
 			dimensions.push(member.dimension);
 		}
 
-		// If the primitive has no dimensions, just return 
-		// return varTreeObject[member.$.name] = {trickVarString: `${varString}.${member.$.name}`};
-
+		// Add dimensions to variables
 		addDimensions(member, `${varString}.${member.$.name}`, dimLocations, dimensions);
+		return varTreeObject[member.$.name] = {trickVarString: `${varString}.${member.$.name}`};
+
 	});
 }
-
-/****** FIX DIMENSIONS TO AVOID RECURSION ON EACH DIMENSION BECAUSE ITS ALL THE SAME ******/
-// DONT FORGET THAT TLO CAN HAVE DIMENSIONS******************************************************************
 
 function addDimensions(member, varString, dimLocations, dimensions) {
 	var segments = varString.split(".");
@@ -165,7 +176,7 @@ function addDimensions(member, varString, dimLocations, dimensions) {
 
 		// Base case, add variable
 		if(segments.length - n == 0) {
-			return
+			// return
 			return console.log(varString.slice(1, varString.length))
 			// var varTreeObject = _.get(trickVariableTree, varString);
 			// varTreeObject[`${member.$.name}[${x}][${y}][${z}]`] = {trickVarString: `${varString}.${member.$.name}[${x}][${y}][${z}]`};
