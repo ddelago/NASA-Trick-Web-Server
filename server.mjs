@@ -7,10 +7,10 @@
 import http from 'http';
 import bodyParser from 'body-parser';
 import express from 'express';
-import { router, setRoutes } from './router';
-import { config, setCommandLineArgs } from './common/variables';
-import { trickClient, startTrickConn } from './trick/trickConnection';
-import { parseSie } from './trick/sie_parser';
+import { router, setRoutes } from './src/router';
+import { config, setCommandLineArgs } from './src/common/variables';
+import { trickClient, startTrickConn } from './src/trick/trickConnection';
+import { parseSie } from './src/trick/sie_parser';
 
 // Command line arguements
 setCommandLineArgs( process.argv.slice(2) ); 
