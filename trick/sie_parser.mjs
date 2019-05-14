@@ -78,7 +78,7 @@ function extractElements(sieObject) {
 	// console.log(classList['Satellite'].member[0]);
 	// console.log("CLASSES:\n", classList);
 	// console.log("\nENUMS:\n", enumList);
-	console.log("\nTOP LEVEL OBJECTS:\n", topLevelObjectList);
+	// console.log("\nTOP LEVEL OBJECTS:\n", topLevelObjectList);
 	// console.log(trickVariableTree.dyn);
 }
 
@@ -161,14 +161,17 @@ function walkClassTree(classObject, varString, varTreeObject, dimLocations, dime
 	});
 }
 
+// Add dimensions to the variable strings
 function addDimensions(member, varString, dimLocations, dimensions) {
 	var segments = varString.split(".");
 	var segmentDimensionList = [];
 
+	// Create the dimensionalized segments. From pos to [ pos[0], pos[1] ]
 	for(var i = 0; i < dimLocations.length; i++) {
 		segmentDimensionList.push(addDimensionsSegment(dimLocations[i], dimensions[i]));
 	}
 
+	// Build the full variable strings
 	buildVariable("", 0);
 
 	function buildVariable(varString, n) {
@@ -227,4 +230,98 @@ function addDimensionsSegment(segment, dimensions) {
 		if(x == Number(dimensions[0]) - 1) break;
 	}
 	return segmentList;
+}
+
+/* OLD CODE BELOW */
+
+// Add dimensions to class
+function addDimensionsClass(member, varString, varTreeObject) {
+	var dims = member.dimension.length;
+
+	// Weird case where dimension is ZERO
+	if(member.dimension[0] == '0' && dims == 1) {
+		varTreeObject[`${member.$.name}[0]`] = {};
+		return walkClassTree(classList[member.$.type], `${varString}.${member.$.name}[0]`, varTreeObject[`${member.$.name}[0]`]);
+	}
+
+	// Loop over dimensions
+	for(var x = 0; x < Number(member.dimension[0]); x++) {
+		if(dims == 1) {
+			varTreeObject[`${member.$.name}[${x}]`] = {};
+			walkClassTree(classList[member.$.type], `${varString}.${member.$.name}[${x}]`, varTreeObject[`${member.$.name}[${x}]`]);
+		}
+
+		// If 2 dimensions
+		else {
+			// Weird case where dimension is ZERO
+			if(member.dimension[1] == '0' && dims == 2) {
+				varTreeObject[`${member.$.name}[${x}][0]`] = {};
+				walkClassTree(classList[member.$.type], `${varString}.${member.$.name}[${x}][0]`, varTreeObject[`${member.$.name}[${x}][0]`]);
+				continue;
+			}
+			for(var y = 0; y < Number(member.dimension[1]); y++) {
+				if(dims == 2) {
+					varTreeObject[`${member.$.name}[${x}][${y}]`] = {};
+					walkClassTree(classList[member.$.type], `${varString}.${member.$.name}[${x}][${y}]`, varTreeObject[`${member.$.name}[${x}][${y}]`]);
+				}
+
+				// If 3 dimensions
+				else {
+					// Weird case where dimension is ZERO
+					if(member.dimension[2] == '0' && dims == 3) {
+						varTreeObject[`${member.$.name}[${x}][${y}][0]`] = {};
+						walkClassTree(classList[member.$.type], `${varString}.${member.$.name}[${x}][${y}][0]`, varTreeObject[`${member.$.name}[${x}][${y}][0]`]);
+						continue;
+					}
+					for(var z = 0; z < Number(member.dimension[2]); z++) {
+						varTreeObject[`${member.$.name}[${x}][${y}][${z}]`] = {};
+						walkClassTree(classList[member.$.type], `${varString}.${member.$.name}[${x}][${y}][${z}]`, varTreeObject[`${member.$.name}[${x}][${y}][${z}]`]);
+					}
+				}
+			}
+		}
+	}
+}
+
+// Add dimensions to primitive
+function addDimensionsPrimitive(member, varString, varTreeObject) {
+	var dims = member.dimension.length;
+
+	// Weird case where dimension is ZERO
+	if(member.dimension[0] == '0' && dims == 1) {
+		return varTreeObject[member.$.name] = {trickVarString: `${varString}.${member.$.name}[0]`};
+	}
+
+	// Loop over dimensions
+	for(var x = 0; x < Number(member.dimension[0]); x++) {
+		if(dims == 1) {
+			varTreeObject[`${member.$.name}[${x}]`] = {trickVarString: `${varString}.${member.$.name}[${x}]`};
+		}
+
+		// If 2 dimensions
+		else {
+			// Weird case where dimension is ZERO
+			if(member.dimension[1] == '0' && dims == 2) {
+				varTreeObject[`${member.$.name}[${x}][0]`] = {trickVarString: `${varString}.${member.$.name}[${x}][0]`};
+				continue;
+			}
+			for(var y = 0; y < Number(member.dimension[1]); y++) {
+				if(dims == 2) {
+					varTreeObject[`${member.$.name}[${x}][${y}]`] = {trickVarString: `${varString}.${member.$.name}[${x}][${y}]`};
+				}
+
+				// If 3 dimensions
+				else {
+					// Weird case where dimension is ZERO
+					if(member.dimension[2] == '0' && dims == 3) {
+						varTreeObject[`${member.$.name}[${x}][${y}][0]`] = {trickVarString: `${varString}.${member.$.name}[${x}][${y}][0]`};
+						continue;
+					}
+					for(var z = 0; z < Number(member.dimension[2]); z++) {
+						varTreeObject[`${member.$.name}[${x}][${y}][${z}]`] = {trickVarString: `${varString}.${member.$.name}[${x}][${y}][${z}]`};
+					}
+				}
+			}
+		}
+	}
 }
