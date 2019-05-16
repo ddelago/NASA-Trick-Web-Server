@@ -1,7 +1,8 @@
+
 # NASA-Trick-Web-Server
 A NodeJS server that communicates with the Trick simulation software and exposes its variables to the web using a REST interface. 
 
-# Data Channel Servers
+## Data Channel Servers
 
  Data Channel Servers provide a variety of potentially realtime JSON data to web clients. These servers have a simple API for querying & accessing data. Data is sent via REST responses or over a WebSocket 'channel stream'.
 
@@ -79,6 +80,7 @@ HTTP Response:
 ```
 
 POST is used for [batch requests](#batch-requests)
+A POST request is a collection of GET requests.
 
 ### PUT
 ---
@@ -101,7 +103,28 @@ Channel Stream:
 
 
 **PUT** `http://localhost/data/comp/ram/usage/*`
-</br>*Same as the previous PUT request except can apply to multiple channels.
+</br>*Same as the previous PUT request except can apply to multiple __immediate__ sub channels.
+</br>Will cause all channel objects matching the wildcard channel name (in this case `/comp/ram/size`) to be added to the channel stream.*
+
+```js
+HTTP Response:
+[
+    "/comp/ram/size",
+]
+Channel Stream:
+[
+    {
+        "channel": "/comp/cpu/temp",
+        "data": 55
+    },
+    {
+        "channel": "/comp/ram/size",
+        "data": "16GB"
+    }
+]
+```
+**PUT** `http://localhost/data/comp/ram/**`
+</br>*Same as the previous PUT request except applys to sub channels __recursively__.
 </br>Will cause all channel objects matching the wildcard channel name (in this case `/comp/ram/usage/free` and `/comp/ram/usage/used`) to be added to the channel stream.*
 
 ```js
@@ -115,6 +138,10 @@ Channel Stream:
     {
         "channel": "/comp/cpu/temp",
         "data": 55
+    },
+    {
+        "channel": "/comp/ram/size",
+        "data": "16GB"
     },
     {
         "channel": "/comp/ram/usage/free",
@@ -181,7 +208,7 @@ JSON Payload:
 }
 ```
 Has the same effect as the following 2 individual requests:</br>
-**PUT** `http://localhost/data/comp/cpu/temp*`</br>
+**PUT** `http://localhost/data/comp/cpu/temp`</br>
 **PUT** `http://localhost/data/comp/ram/usage/*`
 
 POST can be used to do bulk GET requests.</br>
