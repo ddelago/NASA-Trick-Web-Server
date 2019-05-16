@@ -1,5 +1,5 @@
 # NASA-Trick-Web-Server
-A NodeJS tool to stream data from the Trick Variable Server.
+A NodeJS server that communicates with the Trick simulation software and exposes its variables to the web using a REST interface. 
 
 # Data Channel Servers
 
