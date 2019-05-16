@@ -73,8 +73,8 @@ function extractElements(sieObject) {
         addTLO(element.$);
         
 		// Begin recursive construction of variable list
-        // walkClassTree(element.$, element.$.name, trickVariableTree);
-        walkClassTreeNew(element.$, element.$.name, trickVariableTree);
+        walkClassTree(element.$, element.$.name, trickVariableTree);
+        // walkClassTreeNew(element.$, element.$.name, trickVariableTree);
 	});
 
 	// console.log(classList['Satellite'].member[0]);
