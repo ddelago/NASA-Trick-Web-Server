@@ -8,7 +8,7 @@
 import fs from 'fs';
 import  xml2js  from 'xml2js';
 import { trickVariableTree, sieIsParsed, classList, enumList, addEnum, topLevelObjectList, addTLO } from '../common/variables';
-import { walkClassTree } from './parserUtils/walkClassTree';
+import { walkClassTree, walkClassTreeNew } from './parserUtils/walkClassTree';
 export { parseSie };
 
 var parser = new xml2js.Parser();
@@ -63,19 +63,23 @@ function extractElements(sieObject) {
 
 	// Get top_level_objects
 	sieObject.sie.top_level_object.forEach(function(element) {
-		// Ignore reference objects
+        // Ignore reference objects
+        // This skips a VAST majority of internal variables (not useful data)
 		if(element.$.alloc_memory_init == "0") {
-			return;
-		}
-		addTLO(element.$);
-
+            return;
+        }
+        
+        // Add TLO to list
+        addTLO(element.$);
+        
 		// Begin recursive construction of variable list
-		walkClassTree(element.$, element.$.name, trickVariableTree);
+        // walkClassTree(element.$, element.$.name, trickVariableTree);
+        walkClassTreeNew(element.$, element.$.name, trickVariableTree);
 	});
 
 	// console.log(classList['Satellite'].member[0]);
 	// console.log("CLASSES:\n", classList);
 	// console.log("\nENUMS:\n", enumList);
 	// console.log("\nTOP LEVEL OBJECTS:\n", topLevelObjectList);
-	// console.log(trickVariableTree);
+	// console.log(trickVariableTree.dyn);
 }

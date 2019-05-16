@@ -1,10 +1,11 @@
 import { classList, enumList, topLevelObjectList } from '../../common/variables';
 import { addDimensionsClass, addDimensionsPrimitive } from './addDimensions';
-export { walkClassTree };
+export { walkClassTree, walkClassTreeNew };
 
 // Recursively constuct variables and add to list
 function walkClassTree(classObject, varString, varTreeObject) {
-	// If top level object (TLO)
+    // If top level object (TLO)
+    /* DONT FORGET TO ADD DIMENSIONS HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 	if(topLevelObjectList.includes(classObject)) {
 		// Create tree object
 		varTreeObject[varString] = {};
@@ -61,27 +62,28 @@ function walkClassTree(classObject, varString, varTreeObject) {
 }
 
 // WORK IN PROGRESS BELOW
-// Recursively constuct variables and add to list
-function walkClassTreeNew(classObject, varString, varTreeObject, dimLocations, dimensions) {
+function walkClassTreeNew(classObject, varString, varTreeObject) {
 	// If top level object (TLO)
 	if(topLevelObjectList.includes(classObject)) {
 		// If the TLO has dimensions
 		if(classObject.hasOwnProperty('dimension')) {
-			
-			dimLocations.push(classObject.name);
-			dimensions.push(classObject.dimension);
+            var dimString = ''
+            classObject.dimension.forEach(function(dimension) {
+                dimString += `[${dimension}]`;
+            });
 
 			// Create tree object
-			varTreeObject[varString] = {};
+			varTreeObject[`${varString}${dimString}`] = {};
 
 			// Walk the class that equals the TLO type
-			return walkClassTree(classList[classObject.type], varString, varTreeObject[varString], dimLocations, dimensions);
+			return walkClassTreeNew(classList[classObject.type], `${varString}${dimString}`, varTreeObject[`${varString}${dimString}`]);
 		} 
 		else {
 			// Create tree object
-			varTreeObject[varString] = {};
+            varTreeObject[varString] = {};
+            
 			// Walk the class that equals the TLO type
-			return walkClassTree(classList[classObject.type], varString, varTreeObject[varString], dimLocations, dimensions);
+			return walkClassTreeNew(classList[classObject.type], varString, varTreeObject[varString]);
 		}
 	}
 
@@ -98,8 +100,8 @@ function walkClassTreeNew(classObject, varString, varTreeObject, dimLocations, d
 		}
 
 		// Kill when two classes recursively call eachother. 
-		var varStringSplit = varString.split('.');
 		// If they are not the same length, there is a repeated class (recursion)
+		var varStringSplit = varString.split('.');
 		if(varStringSplit.length !== new Set(varStringSplit).size) {
 			return;
 		}
@@ -107,35 +109,37 @@ function walkClassTreeNew(classObject, varString, varTreeObject, dimLocations, d
 		// Check if Enum
 		if(enumList.includes(member.$.type)) {
 			// Add dimensions to variables
-			addDimensions(member, `${varString}.${member.$.name}`, dimLocations, dimensions);
 			return varTreeObject[member.$.name] = {trickVarString: `${varString}.${member.$.name}`};
 		}
 
-		// If class, recurse on object. DONT FORGET THAT CLASSES CAN HAVE DIMENSIONS
+		// If class, recurse on object.
 		if(classList.hasOwnProperty(member.$.type) ) {
 			// If the class has dimensions
 			if(member.hasOwnProperty('dimension')) {
-				dimLocations.push(member.$.name);
-				dimensions.push(member.dimension);
-				varTreeObject[member.$.name] = {};
-				return walkClassTree(classList[member.$.type], `${varString}.${member.$.name}`, varTreeObject[member.$.name], dimLocations, dimensions);
+                var dimString = ''
+                member.dimension.forEach(function(dimension) {
+                    dimString += `[${dimension}]`;
+                });
+				varTreeObject[`${member.$.name}${dimString}`] = {};
+				return walkClassTreeNew(classList[member.$.type], `${varString}.${member.$.name}${dimString}`, varTreeObject[`${member.$.name}${dimString}`]);
 			} 
 			else {
 				varTreeObject[member.$.name] = {};
-				return walkClassTree(classList[member.$.type], `${varString}.${member.$.name}`, varTreeObject[member.$.name], dimLocations, dimensions);
+				return walkClassTreeNew(classList[member.$.type], `${varString}.${member.$.name}`, varTreeObject[member.$.name]);
 			}
 		}
 		
 		// If primitive 
 		// If the primitive has dimensions
 		if(member.hasOwnProperty('dimension')) {
-			dimLocations.push(member.$.name);
-			dimensions.push(member.dimension);
+            var dimString = ''
+            member.dimension.forEach(function(dimension) {
+                dimString += `[${dimension}]`;
+            });
+            return varTreeObject[`${member.$.name}${dimString}`] = {trickVarString: `${varString}.${member.$.name}${dimString}`};
 		}
 
-		// Add dimensions to variables
-		addDimensions(member, `${varString}.${member.$.name}`, dimLocations, dimensions);
+        // Else, just return 
 		return varTreeObject[member.$.name] = {trickVarString: `${varString}.${member.$.name}`};
-
 	});
 }
