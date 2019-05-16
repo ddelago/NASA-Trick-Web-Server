@@ -1,7 +1,41 @@
 
-# NASA-Trick-Web-Server
-A NodeJS server that communicates with the Trick simulation software and exposes its variables to the web using a REST interface. 
+# NASA-Trick-Web-Server (TWS)
+A NodeJS server that communicates with the Trick simulation software and exposes its variables to the web using a REST interface.  
 
+## Getting Started
+1. Install NodeJs from [NodeJs Official Page](https://nodejs.org/en) which should come bundled with npm if you do not have it already.
+2. Install Trick from the [Open Source Trick repository](https://github.com/nasa/trick) then [compile and run a simulation](https://github.com/nasa/trick/wiki/ATutAnalyticSim). 
+	An easier way to do this is to just compile and run a premade simulation:
+	``` bash
+	cd ~/trick/trick_sims/SIM_sat2d
+	# Below trick executable should be in your path after following the installation instructions
+	trick-CP
+	# ~~ Simulation Builds ~~
+	./S_main_Linux__x86_64.exe RUN_test/input.py
+	# Simulation starts and Sim Control window appears
+	```  
+3. Open Terminal
+4. Clone the repository. 
+	``` bash
+	git clone https://github.com/ddelago/NASA-Trick-Web-Server.git
+	```
+5. Change into the project directory
+	``` bash
+	cd NASA-Trick-Web-Server
+	```
+6. Install all dependencies.
+	``` bash
+	npm install
+	```
+7. Find the address and port of a Trick simulation that you want to connect to. Look at the bottom of the Sim Control window. 
+	![](doc/trick_sim_control.png)
+8. Run the following command to start the server
+	``` bash
+	npm start {trick address} {trick port}
+	# Example 
+	npm start 139.169.172.213 37999
+	```
+	
 ## Data Channel Servers
 
  Data Channel Servers provide a variety of potentially realtime JSON data to web clients. These servers have a simple API for querying & accessing data. Data is sent via REST responses or over a WebSocket 'channel stream'.
