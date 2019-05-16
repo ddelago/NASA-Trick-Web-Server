@@ -79,7 +79,7 @@ HTTP Response:
 }
 ```
 
-POST is used for [batch requests](#batch-requests)
+POST is used for [batch requests](#batch-requests).
 A POST request is a collection of GET requests.
 
 ### PUT
