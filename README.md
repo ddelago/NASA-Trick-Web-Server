@@ -269,3 +269,19 @@ HTTP Response:
     }    
 ]
 ```
+### Commands
+
+There are also two command endpoints that I've created. 
+
+**PUT** `http://localhost/cmd/clearVariables`
+</br>*Will remove **ALL** channels from the stream, all variable data stored on the server, and all variables being sent from the Trick Simulation. This could be used to quickly remove everything without performing any logic.*
+
+**POST** `http://localhost/cmd/setVariable/comp/temp`
+with a JSON payload of 
+```js
+JSON Payload:
+{
+	"value": 10
+}
+```
+</br>*Will send the **trick.var_set("comp.temp",  10)** command to the Trick server to change the value of that variable. This allows for control of the simulation!*
