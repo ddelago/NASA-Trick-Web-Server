@@ -8,7 +8,7 @@
 import fs from 'fs';
 import  xml2js  from 'xml2js';
 import { trickVariableTree, sieIsParsed, classList, enumList, addEnum, topLevelObjectList, addTLO } from '../common/variables';
-import { walkClassTree, walkClassTreeNew } from './parserUtils/walkClassTree';
+import { walkClassTree } from './parserUtils/walkClassTree';
 export { parseSie };
 
 var parser = new xml2js.Parser();
@@ -73,13 +73,12 @@ function extractElements(sieObject) {
         addTLO(element.$);
         
 		// Begin recursive construction of variable list
-        // walkClassTree(element.$, element.$.name, trickVariableTree);
-        walkClassTreeNew(element.$, element.$.name, trickVariableTree);
+        walkClassTree(element.$, element.$.name, trickVariableTree);
 	});
 
 	// console.log(classList['Satellite'].member[0]);
 	// console.log("CLASSES:\n", classList.Satellite);
 	// console.log("\nENUMS:\n", enumList);
 	// console.log("\nTOP LEVEL OBJECTS:\n", topLevelObjectList);
-	console.log(trickVariableTree.dyn);
+	// console.log(trickVariableTree.dyn);
 }

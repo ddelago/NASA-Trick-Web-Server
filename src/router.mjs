@@ -1,7 +1,7 @@
 import express from 'express';
 import getVariable from './routes/data/getVariable';
 import getVariableBatch from './routes/data/getVariableBatch';
-import { putChannel, putChannelNew } from './routes/data/putChannel';
+import putChannel from './routes/data/putChannel';
 import putChannelBatch from './routes/data/putChannelBatch';
 import deleteChannel from './routes/delete/deleteChannel';
 import deleteChannelBatch from './routes/delete/deleteChannelBatch';
@@ -16,7 +16,7 @@ export { router, setRoutes };
 function setRoutes(trickClient) {
     getVariable(router, trickClient);
     getVariableBatch(router, trickClient);
-    putChannelNew(router, trickClient);
+    putChannel(router, trickClient);
     putChannelBatch(router, trickClient);
     deleteChannel(router, trickClient);
     deleteChannelBatch(router, trickClient);

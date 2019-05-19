@@ -55,6 +55,7 @@ function getChannelSegments(channelObject, channelSegment, channelList) {
     }
     
     // Recurse on subchannels
+    channelMembers.shift();
     channelList.push(`${channelSegment}/`);
     channelMembers.forEach(function(member) {
         getChannelSegments(channelObject[member], `${channelSegment}/${member}`, channelList);
