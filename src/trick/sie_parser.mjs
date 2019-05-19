@@ -81,5 +81,5 @@ function extractElements(sieObject) {
 	// console.log("CLASSES:\n", classList.Satellite);
 	// console.log("\nENUMS:\n", enumList);
 	// console.log("\nTOP LEVEL OBJECTS:\n", topLevelObjectList);
-	// console.log(trickVariableTree);
+	console.log(trickVariableTree.dyn);
 }

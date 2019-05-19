@@ -50,7 +50,7 @@ function putRequest(channel, trickClient) {
         });
         return;
     } 
-    // If only top level recursive call
+    // If only top level call
     else if(lastChannelSeg == '*') {
         var channelMembers = Object.keys(topChannel);
 

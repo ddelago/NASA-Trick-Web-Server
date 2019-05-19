@@ -73,14 +73,14 @@ function walkClassTreeNew(classObject, varString, varTreeObject) {
             });
 
 			// Create tree object
-			varTreeObject[`${varString}${dimString}`] = {dimension: classObject.dimension, className: classObject.$.name};
+			varTreeObject[`${varString}${dimString}`] = {dimension: classObject.dimension, memberName: classObject.name};
 
 			// Walk the class that equals the TLO type
 			return walkClassTreeNew(classList[classObject.type], `${varString}${dimString}`, varTreeObject[`${varString}${dimString}`]);
 		} 
 		else {
 			// Create tree object
-            varTreeObject[varString] = {className: classObject.$.name};
+            varTreeObject[varString] = {memberName: classObject.name};
             
 			// Walk the class that equals the TLO type
 			return walkClassTreeNew(classList[classObject.type], varString, varTreeObject[varString]);
@@ -89,7 +89,7 @@ function walkClassTreeNew(classObject, varString, varTreeObject) {
 
 	// If class has no members
 	if(classObject.member === undefined) {
-		return varTreeObject[varString] = {trickVarString: varString, className: classObject.$.name};
+		return varTreeObject[varString] = {trickVarString: varString, memberName: classObject.$.name};
 	}
 
 	// Loop over class members
@@ -120,11 +120,11 @@ function walkClassTreeNew(classObject, varString, varTreeObject) {
                 member.dimension.forEach(function(dimension) {
                     dimString += `[${dimension}]`;
                 });
-				varTreeObject[`${member.$.name}${dimString}`] = {dimension: member.dimension, className: member.$.name};
+				varTreeObject[`${member.$.name}${dimString}`] = {dimension: member.dimension, memberName: member.$.name};
 				return walkClassTreeNew(classList[member.$.type], `${varString}.${member.$.name}${dimString}`, varTreeObject[`${member.$.name}${dimString}`]);
 			} 
 			else {
-				varTreeObject[member.$.name] = {className: member.$.name};
+				varTreeObject[member.$.name] = {memberName: member.$.name};
 				return walkClassTreeNew(classList[member.$.type], `${varString}.${member.$.name}`, varTreeObject[member.$.name]);
 			}
 		}
@@ -139,11 +139,11 @@ function walkClassTreeNew(classObject, varString, varTreeObject) {
             return varTreeObject[`${member.$.name}${dimString}`] = {
                 trickVarString: `${varString}.${member.$.name}${dimString}`, 
                 dimension: member.dimension, 
-                className: member.$.name
+                memberName: member.$.name
             };
 		}
 
         // Else, just return 
-		return varTreeObject[member.$.name] = {trickVarString: `${varString}.${member.$.name}`, className: member.$.name};
+		return varTreeObject[member.$.name] = {trickVarString: `${varString}.${member.$.name}`, memberName: member.$.name};
 	});
 }
