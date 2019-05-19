@@ -50,7 +50,7 @@ function getChannelSegments(channelObject, channelSegment, channelList) {
     var channelMembers = Object.keys(channelObject);
 
     // If Channel segment has no subchannels
-    if(channelMembers.length == 1 && channelMembers[0] == 'trickVarString') {
+    if(channelMembers.includes('trickVarString')) {
         return channelList.push(`${channelSegment}`);
     }
     

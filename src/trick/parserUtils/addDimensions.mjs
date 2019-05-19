@@ -38,7 +38,7 @@ function addDimensionsClass(member, varString, varTreeObject) {
 
 // Add dimensions to primitive
 function addDimensionsPrimitive(member, varString, varTreeObject) {
-    console.log(varString)
+    // console.log(varString)
 	var dims = member.dimension.length;
 
 	// Loop over dimensions

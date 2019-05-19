@@ -1,7 +1,7 @@
 import express from 'express';
 import getVariable from './routes/data/getVariable';
 import getVariableBatch from './routes/data/getVariableBatch';
-import putChannel from './routes/data/putChannel';
+import { putChannel } from './routes/data/putChannel';
 import putChannelBatch from './routes/data/putChannelBatch';
 import deleteChannel from './routes/delete/deleteChannel';
 import deleteChannelBatch from './routes/delete/deleteChannelBatch';
