@@ -7,7 +7,8 @@ function deleteChannelBatch(router, trickClient) {
         var channelsRemoved = [];
 
         req.body.forEach(function(channel) {
-            channelsRemoved.concat(deleteRequest(channel, trickClient));
+            var removed = deleteRequest(channel, trickClient)
+            channelsRemoved.concat(removed);
         });
 
         // Response to client

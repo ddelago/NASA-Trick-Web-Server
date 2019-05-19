@@ -54,7 +54,7 @@ function walkClassTree(classObject, varString, varTreeObject) {
 
 		// If class, recurse on object.
 		if(classList.hasOwnProperty(member.$.type) ) {
-			// If the class has dimensions
+			// If the class has dimensions, add it to the variable string: pos -> pos[2]
 			if(member.hasOwnProperty('dimension')) {
                 var dimString = ''
                 member.dimension.forEach(function(dimension) {

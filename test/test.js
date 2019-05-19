@@ -1,9 +1,9 @@
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-var optionsInOut = require("./testData.js").optionsInOut;
-var getInOut = require("./testData.js").getInOut;
-var postInOut = require("./testData.js").postInOut;
-var putInOut = require("./testData.js").putInOut;
-var deleteInOut = require("./testData.js").deleteInOut;
+var optionsInOut = require("./testVariables.js").optionsInOut;
+var getInOut = require("./testVariables.js").getInOut;
+var postInOut = require("./testVariables.js").postInOut;
+var putInOut = require("./testVariables.js").putInOut;
+var deleteInOut = require("./testVariables.js").deleteInOut;
 
 Object.keys(optionsInOut).forEach(function(route) {
 	let xhr = new XMLHttpRequest();
@@ -49,10 +49,10 @@ Object.keys(getInOut).forEach(function(route) {
     xhr.send();
 })
 
-Object.keys(postInOut).forEach(function(route) {
+postInOut.forEach(function(route) {
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", `http://127.0.0.1:3000/data`);
-	xhr.setRequestHeader("Content-type", "application/json");
+	xhr.setRequestHeader("Content-type", "text/plain");
 
 	// Define the response callback
 	xhr.onreadystatechange = function() {
@@ -67,8 +67,8 @@ Object.keys(postInOut).forEach(function(route) {
 				console.error(`XHR POST http://127.0.0.1:3000/data request failed: ${this.status}`);
 			}
 		}
-	}
-    xhr.send(JSON.stringify(route));
+    }
+    xhr.send(JSON.stringify(route.input));
 })
 
 Object.keys(putInOut).forEach(function(route) {

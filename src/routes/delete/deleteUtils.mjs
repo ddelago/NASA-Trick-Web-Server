@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { removeChannel, trickVariableMap, trickVariableTree } from '../../common/variables';
+import { removeChannel, trickVariableMap, trickVariableTree, channelList } from '../../common/variables';
 export { deleteRequest as default };
 
 var channelsRemoved = [];
@@ -20,8 +20,8 @@ function deleteRequest(channel, trickClient) {
         // Replace '/' channel notation to dot notation
         var trickVariable = trickVariableChannel.replace(/[/]/g, ".");
 
-        // Send to Trick if it does not exist already
-        if(!channelList.includes(trickVariableChannel)) {
+        // Remove if exists
+        if(channelList.includes(trickVariableChannel)) {
             trickClient.write(`trick.var_remove(\"${trickVariable}\")\n`);
 
             // Update channel list and variable map
@@ -67,6 +67,7 @@ function deleteRequest(channel, trickClient) {
                 }
             }
         });
+        return channelsRemoved;
     }
 
     // If recursive call
@@ -75,6 +76,7 @@ function deleteRequest(channel, trickClient) {
         Object.keys(topChannel).forEach(function (member) {
             getChannelSegments(`${trickVariableChannel.substring(0, trickVariableChannel.length - 2)}`, topChannel[member], trickClient);
         });
+        return channelsRemoved;
     } 
 }
 
@@ -139,8 +141,8 @@ function addChannelList(channel, member, trickClient) {
     // Replace '/' channel notation to dot notation
     var trickVariable = channelSegment.replace(/[/]/g, ".");
 
-    // Send to Trick if it does not exist already
-    if(!channelList.includes(`${channelSegment}`)) {
+    // Remove if it exists
+    if(channelList.includes(`${channelSegment}`)) {
         trickClient.write(`trick.var_remove(\"${trickVariable}\")\n`);
 
         // Update channel list and variable map
