@@ -268,7 +268,7 @@ HTTP Response:
 ]
 ```
 ### Extra
-
+---
 There are also two more endpoints that I've created. 
 
 **PUT** `http://localhost/cmd/clearVariables`
@@ -283,3 +283,7 @@ JSON Payload:
 }
 ```
 </br>*Will send the **trick.var_set("comp.temp",  10)** command to the Trick server to change the value of that variable. This allows for control of the simulation!*
+
+### Tests
+---
+A test.js file can be found in the test directory. It is not fully implemented yet and only runs a set of test cases.
