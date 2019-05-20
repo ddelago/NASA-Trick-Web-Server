@@ -14,22 +14,20 @@ A NodeJS server that communicates with the Trick simulation software and exposes
 	./S_main_Linux__x86_64.exe RUN_test/input.py
 	# Simulation starts and Sim Control window appears
 	```  
-3. Open Terminal
-4. Clone the repository. 
+3. Clone the repository. 
 	``` bash
 	git clone https://github.com/ddelago/NASA-Trick-Web-Server.git
 	```
-5. Change into the project directory
+4. Change into the project directory
 	``` bash
 	cd NASA-Trick-Web-Server
 	```
-6. Install all dependencies.
+5. Install all dependencies.
 	``` bash
 	npm install
 	```
-7. Find the address and port of a Trick simulation that you want to connect to. Look at the bottom of the Sim Control window.
-	</br>![](doc/trick_sim_control_50.png)
-8. Run the following command to start the server
+6. Find the address and port of a Trick simulation that you want to connect to. Look at the bottom of the Sim Control window.
+7. Run the following command to start the server
 	``` bash
 	npm start {trick address} {trick port}
 	# Example 
