@@ -40,7 +40,13 @@ function getOptions(router, trickClient) {
             res.send(channelList)
         }
         else if (lastChannelSeg == '*') {
-            res.send(Object.keys(topChannel));
+            var returnArray = [];
+            Object.keys(topChannel).forEach(function(member) {
+                if(member != 'memberName') {
+                    returnArray.push(member);
+                }
+            });
+            res.send(returnArray);
         }
    });
 }
@@ -48,6 +54,11 @@ function getOptions(router, trickClient) {
 // Recursively build subchannels and add the to channelList
 function getChannelSegments(channelObject, channelSegment, channelList) {
     var channelMembers = Object.keys(channelObject);
+    
+    // Skip meta argument
+    if(channelSegment == 'memberName') {
+        return;
+    }
 
     // If Channel segment has no subchannels
     if(channelMembers.includes('trickVarString')) {
