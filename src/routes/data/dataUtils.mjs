@@ -126,7 +126,7 @@ function addDimensions(channel, member, trickClient) {
 }
 
 function addChannelList(channel, member, trickClient) {
-    // Constructed variable channel, remove * from end then append member
+    // Constructed variable channel
     var channelSegment = `${channel}${member}`
 
     // Replace '/' channel notation to dot notation
