@@ -27,8 +27,7 @@ A NodeJS server that communicates with the Trick simulation software and exposes
 	``` bash
 	npm install
 	```
-7. Find the address and port of a Trick simulation that you want to connect to. Look at the bottom of the Sim Control window. 
-	![](doc/trick_sim_control.PNG)
+7. Find the address and port of a Trick simulation that you want to connect to. Look at the bottom of the Sim Control window.
 	![](doc/trick_sim_control_50.png)
 8. Run the following command to start the server
 	``` bash
