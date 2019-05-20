@@ -2,10 +2,10 @@
 export { setVariable as default };
 
 function setVariable(router, trickClient) {
-    router.post('/cmd/setVariable/*', (req, res) => {
+    router.post('/cmd/*', (req, res) => {
 
         // Extract trick variable from url
-        var trickVariableChannel = req.url.substring(17);
+        var trickVariableChannel = req.url.substring(5);
 
         // Replace '/' channel notation to dot notation
         var trickVariable = trickVariableChannel.replace(/[/]/g, ".");
