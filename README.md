@@ -269,14 +269,14 @@ HTTP Response:
     }    
 ]
 ```
-### Commands
+### Extra
 
-There are also two command endpoints that I've created. 
+There are also two more endpoints that I've created. 
 
 **PUT** `http://localhost/cmd/clearVariables`
 </br>*Will remove **ALL** channels from the stream, all variable data stored on the server, and all variables being sent from the Trick Simulation. This could be used to quickly remove everything without performing any logic.*
 
-**POST** `http://localhost/cmd/setVariable/comp/temp`
+**POST** `http://localhost/cmd/comp/temp`
 with a JSON payload of 
 ```js
 JSON Payload:
