@@ -19,7 +19,7 @@
   "homepage": "https://github.com/ddelago/NASA-Trick-Web-Server#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "http": "0.0.0",
     "lodash": "^4.17.11",
     "log-to-file": "^2.0.1",
